@@ -4,7 +4,7 @@ g_state.file_name = 'SocialNetworkData.txt';
 async function save_data_to_file() {
 
     const json = JSON.stringify(g_state.users);
-    await fs.writeFile(g_state.file_name, json);
+    await g_state.fs.writeFile(g_state.file_name, json);
     //TODO: update the data that is being stored.
 }
 
