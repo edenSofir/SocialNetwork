@@ -1,5 +1,6 @@
 g_state.fs = require('fs').promises;
 g_state.file_name = 'SocialNetworkData.txt';
+
 async function save_data_to_file() {
 
     const json = JSON.stringify(g_state.users);
@@ -13,6 +14,3 @@ async function read_data_from_file() {
     g_state.users = JSON.parse(await json);
     //TODO: update the placement acording to the data that was saved.
 }
-
-const text = '["Ford", "BMW", "Audi", "Fiat"]';
-const myArr = JSON.parse(text);
