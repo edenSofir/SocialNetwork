@@ -1,4 +1,10 @@
+const express = require("express");
 const status_codes = require('http-status-codes').StatusCodes;
+
+
+const router = express.Router();
+const app = express();
+const port = 2718 ;
 
 function get_user(req, res) {
     const current_id = (req.params.id);
@@ -23,15 +29,59 @@ function get_user(req, res) {
 function create_new_user(req, res){
 
     const full_name = req.body.full_name;
-
-    if(!name){
+    if(!full_name){
         res.status(status_codes.BAD_REQUEST);
         res.send("No name specified in the current request");
         return;
     }
     const id = g_state.user_id += 1 ;
-    const email = req.body.email_address
+    const email = req.body.email_address;
+    if(!email){
+        res.status(status_codes.BAD_REQUEST);
+        res.send("No email specified in the current request");
+        return;
+    }
+    const password = req.body.password;
+    if(!password){
+        res.status(status_codes.BAD_REQUEST);
+        res.send("No password specified in the current request");
+        return;
+    }
 
-
-
+    const new_user = new User(full_name,id,email,password);
+    g_state.users.push(new_user);
+    res.send(JSON.stringify(new_user));
 }
+
+function delete_current_user(req, res)
+{
+    const current_id =  parseInt(req.params.id);
+    if(current_id < 0)
+    {
+        res.status( StatusCodes.BAD_REQUEST );
+        res.send( "the current id is out of range")
+        return;
+    }
+    if(current_id === 1)
+    {
+        res.status( StatusCodes.FORBIDDEN );
+        res.send( "the current id is the admin user - he can not be deleted")
+        return;
+    }
+    const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id )
+    if(idx_in_arr < 0)
+    {
+        res.status(status_codes.NOT_FOUND);
+        res.send("there is no such user in our users array");
+        return;
+    }
+    g_state.users.splice(idx_in_arr, 1);
+    res.send(JSON.stringify( g_state.users) ); //new array
+}
+
+function restore_user()
+{
+    //TODO
+}
+
+
