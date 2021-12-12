@@ -32,6 +32,11 @@ class User{
         g_state.message_id += 1;
         recipient.messages.push(message);
     }
+    
+    delete() {
+        this.status = Status.deleted;
+        //TODO: does it needs to be deleted from g_state.users? if stays need to add if in all the methods
+    }
 }
 
 function get_post_index(user, post_to_find){
