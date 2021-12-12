@@ -16,7 +16,7 @@ admin.suspend_user = function(current_user) {
 admin.delete_user = function(current_user) {
 
     current_user.status = Status.deleted;
-    //TODO: does it needs to be deleted from g_state.users?
+    //TODO: does it needs to be deleted from g_state.users? if stays need to add if in all the methods
 }
 
 admin.restore_suspend_user = function(current_user) {
@@ -37,7 +37,7 @@ admin.delete_a_post_from_user = function(current_user, post_id) {
 
 admin.send_message_to_all_users = function(message_to_send) {
 
-    const message = new Message(message_to_send, g_state.message_id, Date.now(), admin.fullName);
+    const message = new Message(message_to_send, g_state.message_id, Date.now(), admin);
     g_state.message_id += 1;
 
     g_state.users.forEach((user) => {
