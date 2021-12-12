@@ -1,19 +1,11 @@
 
 class Post {
 
-    constructor(creator, text, id, date) {
-        this.creator = creator;
+    constructor(creator, text, id) {
+        this.creator = creator; //user
         this.text = text;
         this.id = id;
-        this.date = date;
-    }
-
-    publish(){
-        //TODO: implement
-    }
-
-    delete(){
-        //TODO: implement
+        this.date = Date.now();
     }
 
 }
