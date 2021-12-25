@@ -1,7 +1,7 @@
 const g_state = require("../JavaScript/g_state");
 g_state.g_state.fs = require('fs').promises;
 g_state.g_state.path = require('path');
-g_state.g_state.filePath = this.path.join(__dirname, '/SocialNetworkData.txt');
+g_state.g_state.filePath = g_state.g_state.path.join(__dirname, '/SocialNetworkData.txt');
 
 
 
@@ -22,7 +22,7 @@ async function read_data_from_file() {
     g_state.users = data_to_save.users;
     g_state.user_id = data_to_save.user_id;
     g_state.post_id = data_to_save.post_id;
-    //TODO: update the placement according to the data that was saved.
 }
 
-save_data_to_file().then(r => console.log("finished"));
+//save_data_to_file().then(r => console.log("finished"));
+//read_data_from_file().then(r => console.log(g_state.users));
