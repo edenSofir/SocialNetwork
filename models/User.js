@@ -76,3 +76,5 @@ const Status = {
     suspended : 3,
     deleted : 4
 };
+module.exports = { User, Status  }
+
