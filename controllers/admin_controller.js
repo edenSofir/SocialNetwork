@@ -1,6 +1,7 @@
 const express = require("express");
 const admin_services = require('../services/admin_services');
 const status_codes = require('http-status-codes').StatusCodes;
+const g_state = require("../JavaScript/g_state");
 
 
 
@@ -10,7 +11,7 @@ const port = 2718 ;
 
 function get_user(req, res) {
     //TODO: what is it for?
-    const current_id = (req.params.id);
+    const current_id = parseInt(req.params.id);
 
     if (current_id < 0) {
         res.status(status_codes.BAD_REQUEST);
@@ -18,7 +19,7 @@ function get_user(req, res) {
         return;
     }
 
-    const current_user = g_state.users.find(user => user.id === current_id)
+    const current_user = g_state.g_state.users.find(user => user.id === current_id)
 
     if (!current_user){
         res.status(status_codes.NOT_FOUND);
@@ -52,7 +53,7 @@ function create_new_user(req, res){
     }
 
     const new_user = new User(full_name,id,email,password);
-    g_state.users.push(new_user);
+    g_state.g_state.users.push(new_user);
     res.send(JSON.stringify(new_user));
 }
 
@@ -70,20 +71,19 @@ function delete_current_user(req, res) {
         res.send( "the current id is the admin user - he can not be deleted");
         return;
     }
-    const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id )
+    const idx_in_arr =  g_state.g_state.users.findIndex( user =>  user.id === current_id )
     if(idx_in_arr < 0)
     {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    admin_services.delete_user(g_state.users[idx_in_arr]);//admin deletes the user
+    admin_services.delete_user(g_state.g_state.users[idx_in_arr]);//admin deletes the user
 
-    res.send(JSON.stringify( g_state.users) ); //new array
+    res.send(JSON.stringify( g_state.g_state.users) ); //new array
 }
 
 function restore_user(req, res) {
-    ///Nikol: I hope that this is correct. I did it according to the previous methods
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
@@ -97,15 +97,15 @@ function restore_user(req, res) {
         res.send( "the current id is the admin user - already active");
         return;
     }
-    const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
+    const idx_in_arr =  g_state.g_state.users.findIndex( user =>  user.id === current_id );
     if(idx_in_arr < 0)
     {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    admin_services.restore_suspend_user(g_state.users[idx_in_arr]);
-    res.send(JSON.stringify( g_state.users) ); //new array
+    admin_services.restore_suspend_user(g_state.g_state.users[idx_in_arr]);
+    res.send(JSON.stringify( g_state.g_state.users) ); //new array
 }
 
 function suspend_user(req, res) {
@@ -122,15 +122,15 @@ function suspend_user(req, res) {
         res.send( "the current id is the admin user - already active");
         return;
     }
-    const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
+    const idx_in_arr =  g_state.g_state.users.findIndex( user =>  user.id === current_id );
     if(idx_in_arr < 0)
     {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    admin_services.suspend_user(g_state.users[idx_in_arr]);
-    res.send(JSON.stringify( g_state.users) ); //new array
+    admin_services.suspend_user(g_state.g_state.users[idx_in_arr]);
+    res.send(JSON.stringify( g_state.g_state.users) ); //new array
 }
 
 function approve_user(req, res) {
@@ -147,15 +147,15 @@ function approve_user(req, res) {
         res.send( "the current id is the admin user - already active");
         return;
     }
-    const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
+    const idx_in_arr =  g_state.g_state.users.findIndex( user =>  user.id === current_id );
     if(idx_in_arr < 0)
     {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    admin_services.approve_join_request(g_state.users[idx_in_arr]);
-    res.send(JSON.stringify( g_state.users) ); //new array
+    admin_services.approve_join_request(g_state.g_state.users[idx_in_arr]);
+    res.send(JSON.stringify( g_state.g_state.users) ); //new array
 }
 
 function get_all_users(req, res) {

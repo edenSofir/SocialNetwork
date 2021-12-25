@@ -1,3 +1,4 @@
+const {StatusCodes: status_codes} = require("http-status-codes");
 const g_state = {
     message_id: 1,
     user_id: 0,
@@ -7,3 +8,5 @@ const g_state = {
 }
 
 g_state.admin.status = Status.active;
+
+module.exports = { g_state  }
