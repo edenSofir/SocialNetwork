@@ -1,0 +1,29 @@
+const user_services = require('../services/user_service');
+const g_state = require("../JavaScript/g_state");
+
+
+function delete_user_account(req, res) {
+    const current_id =  parseInt(req.params.id);
+    if(current_id < 0)
+    {
+        res.status( g_state.g_state.status_codes.BAD_REQUEST );
+        res.send( "the current id is out of range")
+        return;
+    }
+    if(current_id === 1)
+    {
+        res.status( g_state.g_state.status_codes.FORBIDDEN );
+        res.send( "the current id is the admin user - he can not be deleted");
+        return;
+    }
+    const user = g_state.g_state.find_user_by_id(current_id);
+    if(user)
+    {
+        res.status(g_state.g_state.status_codes.NOT_FOUND);
+        res.send("there is no such user in our users array");
+        return;
+    }
+    user_services.delete_user_account(user);
+
+    res.send(JSON.stringify( g_state.g_state.users) );
+}

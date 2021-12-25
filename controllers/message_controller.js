@@ -37,5 +37,5 @@ function send_a_message(req, res) {
     {
         res.status( g_state.g_state.status_codes.FORBIDDEN);
     }
-    res.send(JSON.stringify( g_state.g_state.users) ); //new array
+    res.send(JSON.stringify(g_state.g_state.users)); //new array
 }
