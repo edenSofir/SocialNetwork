@@ -58,13 +58,13 @@ function delete_current_user(req, res)
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
-        res.status( StatusCodes.BAD_REQUEST );
+        res.status( status_codes.BAD_REQUEST );
         res.send( "the current id is out of range")
         return;
     }
     if(current_id === 1)
     {
-        res.status( StatusCodes.FORBIDDEN );
+        res.status( status_codes.FORBIDDEN );
         res.send( "the current id is the admin user - he can not be deleted")
         return;
     }

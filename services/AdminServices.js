@@ -1,14 +1,10 @@
-const admin = new User("Admin",0,"admin@admin.com","admin");
-admin.status = Status.active;
-g_state.admin = admin ;
-
 admin.approve_join_request = function(current_user) {
 
     current_user.status = Status.active;
     g_state.users.push(current_user);
 }
 
-admin.suspend_user = function(current_user) {
+g_state.admin.suspend_user = function(current_user) {
 
     current_user.status = Status.suspended;
 }
@@ -27,12 +23,12 @@ admin.restore_suspend_user = function(current_user) {
 admin.delete_a_post_from_user = function(current_user, post_id) {
 
     current_user.posts.forEach((post, index) => {
-            if(post.id === post_id)
-            {
-                current_user.posts.slice(index, 1);
-                return;
-            }
-        });
+        if(post.id === post_id)
+        {
+            current_user.posts.slice(index, 1);
+            return;
+        }
+    });
 }
 
 admin.send_message_to_all_users = function(message_to_send) {
@@ -44,4 +40,3 @@ admin.send_message_to_all_users = function(message_to_send) {
         user.messages.push(message);
     });
 }
-
