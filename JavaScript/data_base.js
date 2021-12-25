@@ -21,7 +21,7 @@ async function read_data_from_file() {
     const data_to_save = JSON.parse(await json);
     g_state.users = data_to_save.users;
     g_state.user_id = data_to_save.user_id;
-    g_state.post_id = Jdata_to_save.post_id;
+    g_state.post_id = data_to_save.post_id;
     //TODO: update the placement according to the data that was saved.
 }
 
