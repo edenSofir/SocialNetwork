@@ -11,8 +11,7 @@ const g_state = {
     port : 2718,
     express : require("express"),
     status_codes : require('http-status-codes').StatusCodes,
-    app : this.express(),
-    router : this.express.Router(),
+
     find_user_by_id : function(id) {
         this.users.forEach((user) => {
            if(user.id === id)
@@ -22,6 +21,8 @@ const g_state = {
         return null;
     }
 }
+g_state.app = g_state.express();
+g_state.router = g_state.express.Router(),
 
 g_state.admin.status = users.Status.active;
 
