@@ -7,24 +7,21 @@ g_state.g_state.filePath = this.path.join(__dirname, '/SocialNetworkData.txt');
 
 async function save_data_to_file() {
 
-    const users_json = JSON.stringify(g_state.g_state.users);
-    const users_id_json = JSON.stringify(g_state.g_state.user_id);
-    const posts_id_json = JSON.stringify(g_state.g_state.post_id);
+    const data_to_save = { users: g_state.g_state.users, user_id: g_state.g_state.user_id, post_id: g_state.g_state.post_id}
+    const json = JSON.stringify(data_to_save);
 
-    await g_state.g_state.fs.writeFile(g_state.g_state.filePath, users_json);
-    await g_state.g_state.fs.writeFile(g_state.g_state.filePath, users_id_json);
-    await g_state.g_state.fs.writeFile(g_state.g_state.filePath, posts_id_json);
+    await g_state.g_state.fs.writeFile(g_state.g_state.filePath, json);
+
 
 }
 
 async function read_data_from_file() {
 
-    const users_json = g_state.g_state.fs.readFile(g_state.g_state.filePath, 'utf8');
-    const users_id_json = g_state.g_state.fs.readFile(g_state.g_state.filePath, 'utf8');
-    const posts_id_json = g_state.g_state.fs.readFile(g_state.g_state.filePath, 'utf8');
-    g_state.users = JSON.parse(await users_json);
-    g_state.user_id = JSON.parse(await users_id_json);
-    g_state.post_id = JSON.parse(await posts_id_json);
+    const json = g_state.g_state.fs.readFile(g_state.g_state.filePath, 'utf8');
+    const data_to_save = JSON.parse(await json);
+    g_state.users = data_to_save.users;
+    g_state.user_id = data_to_save.user_id;
+    g_state.post_id = Jdata_to_save.post_id;
     //TODO: update the placement according to the data that was saved.
 }
 
