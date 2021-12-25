@@ -1,5 +1,5 @@
 const express = require("express");
-const admin_services = require('../services/AdminServices');
+const admin_services = require('../services/admin_services');
 const status_codes = require('http-status-codes').StatusCodes;
 
 
@@ -77,9 +77,8 @@ function delete_current_user(req, res) {
         res.send("there is no such user in our users array");
         return;
     }
-    //--//(g_state.users[idx_in_arr]);//admin deletes the user
-    //g_state.users.splice(idx_in_arr, 1);
-    ///Nikol: moved to the delete function in Admin.js
+    admin_services.delete_user(g_state.users[idx_in_arr]);//admin deletes the user
+
     res.send(JSON.stringify( g_state.users) ); //new array
 }
 
@@ -95,7 +94,7 @@ function restore_user(req, res) {
     if(current_id === 1)
     {
         res.status( status_codes.FORBIDDEN );
-        res.send( "the current id is the admin user - he is always active");
+        res.send( "the current id is the admin user - already active");
         return;
     }
     const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
@@ -105,12 +104,11 @@ function restore_user(req, res) {
         res.send("there is no such user in our users array");
         return;
     }
-    g_state.admin.restore_suspend_user(g_state.users[idx_in_arr]);
+    admin_services.restore_suspend_user(g_state.users[idx_in_arr]);
     res.send(JSON.stringify( g_state.users) ); //new array
 }
 
 function suspend_user(req, res) {
-    ///Nikol: I hope that this is correct. I did it according to the previous methods
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
@@ -121,7 +119,7 @@ function suspend_user(req, res) {
     if(current_id === 1)
     {
         res.status( status_codes.FORBIDDEN );
-        res.send( "the current id is the admin user - he is always active");
+        res.send( "the current id is the admin user - already active");
         return;
     }
     const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
@@ -131,12 +129,11 @@ function suspend_user(req, res) {
         res.send("there is no such user in our users array");
         return;
     }
-    g_state.admin.suspend_user(g_state.users[idx_in_arr]);
+    admin_services.suspend_user(g_state.users[idx_in_arr]);
     res.send(JSON.stringify( g_state.users) ); //new array
 }
 
 function approve_user(req, res) {
-    ///Nikol: I hope that this is correct. I did it according to the previous methods
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
@@ -147,7 +144,7 @@ function approve_user(req, res) {
     if(current_id === 1)
     {
         res.status( status_codes.FORBIDDEN );
-        res.send( "the current id is the admin user - he is always active");
+        res.send( "the current id is the admin user - already active");
         return;
     }
     const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
@@ -157,13 +154,13 @@ function approve_user(req, res) {
         res.send("there is no such user in our users array");
         return;
     }
-    g_state.admin.approve_join_request(g_state.users[idx_in_arr]);
+    admin_services.approve_join_request(g_state.users[idx_in_arr]);
     res.send(JSON.stringify( g_state.users) ); //new array
 }
 
 function get_all_users(req, res) {
-    //TODO: check if correct
-    res.send(JSON.stringify( g_state.users) );
+
+    res.send(JSON.stringify(admin_services.get_all_users()));
 }
 
 
