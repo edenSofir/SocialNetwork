@@ -1,27 +1,20 @@
-const express = require("express");
 const admin_services = require('../services/admin_services');
-const status_codes = require('http-status-codes').StatusCodes;
 const g_state = require("../JavaScript/g_state");
 
-
-
-const router = express.Router();
-const app = express();
-const port = 2718 ;
 
 function get_user(req, res) {
     const current_id = parseInt(req.params.id);
 
     if (current_id < 0) {
-        res.status(status_codes.BAD_REQUEST);
+        res.status(g_state.g_state.status_codes.BAD_REQUEST);
         res.send("the current id isn't valid");
         return;
     }
 
-    const current_user = g_state.g_state.users.find(user => user.id === current_id)
+    const current_user = g_state.g_state.find_user_by_id(current_id);
 
     if (!current_user){
-        res.status(status_codes.NOT_FOUND);
+        res.status(g_state.g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users");
         return;
     }
@@ -33,25 +26,25 @@ function create_new_user(req, res){
 
     const full_name = req.body.full_name;
     if(!full_name){
-        res.status(status_codes.BAD_REQUEST);
+        res.status(g_state.g_state.status_codes.BAD_REQUEST);
         res.send("No name specified in the current request");
         return;
     }
     const id = g_state.user_id += 1 ;
     const email = req.body.email_address;
     if(!email){
-        res.status(status_codes.BAD_REQUEST);
+        res.status(g_state.g_state.status_codes.BAD_REQUEST);
         res.send("No email specified in the current request");
         return;
     }
     const password = req.body.password;
     if(!password){
-        res.status(status_codes.BAD_REQUEST);
+        res.status(g_state.g_state.status_codes.BAD_REQUEST);
         res.send("No password specified in the current request");
         return;
     }
 
-    const new_user = new User(full_name,id,email,password);
+    const new_user = new g_state.g_state.User(full_name,id,email,password);
     g_state.g_state.users.push(new_user);
     res.send(JSON.stringify(new_user));
 }
@@ -60,20 +53,20 @@ function delete_current_user(req, res) {
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
-        res.status( status_codes.BAD_REQUEST );
+        res.status( g_state.g_state.status_codes.BAD_REQUEST );
         res.send( "the current id is out of range")
         return;
     }
     if(current_id === 1)
     {
-        res.status( status_codes.FORBIDDEN );
+        res.status( g_state.g_state.status_codes.FORBIDDEN );
         res.send( "the current id is the admin user - he can not be deleted");
         return;
     }
     const idx_in_arr =  g_state.g_state.users.findIndex( user =>  user.id === current_id )
     if(idx_in_arr < 0)
     {
-        res.status(status_codes.NOT_FOUND);
+        res.status(g_state.g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
@@ -86,20 +79,20 @@ function restore_user(req, res) {
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
-        res.status( status_codes.BAD_REQUEST );
+        res.status( g_state.g_state.status_codes.BAD_REQUEST );
         res.send( "the current id is out of range");
         return;
     }
     if(current_id === 1)
     {
-        res.status( status_codes.FORBIDDEN );
+        res.status( g_state.g_state.status_codes.FORBIDDEN );
         res.send( "the current id is the admin user - already active");
         return;
     }
     const idx_in_arr =  g_state.g_state.users.findIndex( user =>  user.id === current_id );
     if(idx_in_arr < 0)
     {
-        res.status(status_codes.NOT_FOUND);
+        res.status(g_state.g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
@@ -111,20 +104,20 @@ function suspend_user(req, res) {
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
-        res.status( status_codes.BAD_REQUEST );
+        res.status( g_state.g_state.status_codes.BAD_REQUEST );
         res.send( "the current id is out of range");
         return;
     }
     if(current_id === 1)
     {
-        res.status( status_codes.FORBIDDEN );
+        res.status( g_state.g_state.status_codes.FORBIDDEN );
         res.send( "the current id is the admin user - already active");
         return;
     }
     const idx_in_arr =  g_state.g_state.users.findIndex( user =>  user.id === current_id );
     if(idx_in_arr < 0)
     {
-        res.status(status_codes.NOT_FOUND);
+        res.status(g_state.g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
@@ -136,20 +129,20 @@ function approve_user(req, res) {
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
-        res.status( status_codes.BAD_REQUEST );
+        res.status( g_state.g_state.status_codes.BAD_REQUEST );
         res.send( "the current id is out of range");
         return;
     }
     if(current_id === 1)
     {
-        res.status( status_codes.FORBIDDEN );
+        res.status( g_state.g_state.status_codes.FORBIDDEN );
         res.send( "the current id is the admin user - already active");
         return;
     }
     const idx_in_arr =  g_state.g_state.users.findIndex( user =>  user.id === current_id );
     if(idx_in_arr < 0)
     {
-        res.status(status_codes.NOT_FOUND);
+        res.status(g_state.g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }

@@ -11,5 +11,5 @@ send_a_message = function (sender_id, recipient, message)
     return false;
 }
 
-module.exports = { send_a_message,  }
+module.exports = { send_a_message }
 
