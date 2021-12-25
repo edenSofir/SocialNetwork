@@ -10,7 +10,6 @@ const app = express();
 const port = 2718 ;
 
 function get_user(req, res) {
-    //TODO: what is it for?
     const current_id = parseInt(req.params.id);
 
     if (current_id < 0) {

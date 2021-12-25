@@ -1,3 +1,4 @@
+const g_state = require("../JavaScript/g_state");
 
 class User{
 
@@ -15,8 +16,8 @@ class User{
     publish_post(text){
 
         if(this.status === Status.active) {
-            const post = new Post(this, text, g_state.post_id);
-            g_state.post_id += 1;
+            const post = new Post(this, text, g_state.g_state.post_id);
+            g_state.g_state.post_id += 1;
             this.posts.push(post);
             return true;
         }
@@ -37,8 +38,8 @@ class User{
     send_message(recipient, text) {
 
         if (this.status === Status.active) {
-            const message = new Message(text, g_state.message_id, this);
-            g_state.message_id += 1;
+            const message = new Message(text, g_state.g_state.message_id, this);
+            g_state.g_state.message_id += 1;
             recipient.messages.push(message);
             return true;
         }
@@ -48,9 +49,9 @@ class User{
     delete() {
         if(this.status === Status.active) {
             //TODO: code duplication
-            g_state.users.forEach((user, index) => {
+            g_state.g_state.users.forEach((user, index) => {
                 if (user.id === this.id) {
-                    g_state.users.splice(index, 1);
+                    g_state.g_state.users.splice(index, 1);
                 }
             });
             return true;
