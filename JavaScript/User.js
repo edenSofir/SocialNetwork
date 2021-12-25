@@ -1,5 +1,6 @@
 
 class User{
+
     constructor(full_name ,id , email_address, password,) {
         this.full_name = full_name;
         this.id = id;
@@ -17,25 +18,31 @@ class User{
             const post = new Post(this, text, g_state.post_id);
             g_state.post_id += 1;
             this.posts.push(post);
+            return true;
         }
-        //TODO: handle error
+        return false;
     }
 
-    delete_post(post){
-        const index = get_post_index(this, post);
-        this.posts.slice(index, 1);
+    delete_post(post) {
+        if (this.status === Status.active) {
+            const index = get_post_index(this, post);
+            this.posts.slice(index, 1);
+        }
     }
 
-    send_message(recipient, text){
+    send_message(recipient, text) {
 
-        const message = new Message(text, g_state.message_id, this);
-        g_state.message_id += 1;
-        recipient.messages.push(message);
+        if (this.status === Status.active) {
+            const message = new Message(text, g_state.message_id, this);
+            g_state.message_id += 1;
+            recipient.messages.push(message);
+        }
     }
     
     delete() {
-        this.status = Status.deleted;
-        //TODO: does it needs to be deleted from g_state.users? if stays need to add if in all the methods
+        if(this.status === Status.active)
+            g_state.admin.delete_user(this);
+        //TODO: can a suspended user delete himself?
     }
 }
 

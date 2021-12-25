@@ -7,6 +7,7 @@ const app = express();
 const port = 2718 ;
 
 function get_user(req, res) {
+    //TODO: what is it for?
     const current_id = (req.params.id);
 
     if (current_id < 0) {
@@ -53,8 +54,7 @@ function create_new_user(req, res){
     res.send(JSON.stringify(new_user));
 }
 
-function delete_current_user(req, res)
-{
+function delete_current_user(req, res) {
     const current_id =  parseInt(req.params.id);
     if(current_id < 0)
     {
@@ -65,7 +65,7 @@ function delete_current_user(req, res)
     if(current_id === 1)
     {
         res.status( status_codes.FORBIDDEN );
-        res.send( "the current id is the admin user - he can not be deleted")
+        res.send( "the current id is the admin user - he can not be deleted");
         return;
     }
     const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id )
@@ -75,13 +75,93 @@ function delete_current_user(req, res)
         res.send("there is no such user in our users array");
         return;
     }
-    g_state.users.splice(idx_in_arr, 1);
+    g_state.admin.delete_user(g_state.users[idx_in_arr]);//admin deletes the user
+    //g_state.users.splice(idx_in_arr, 1);
+    ///Nikol: moved to the delete function in Admin.js
     res.send(JSON.stringify( g_state.users) ); //new array
 }
 
-function restore_user()
-{
-    //TODO
+function restore_user(req, res) {
+    ///Nikol: I hope that this is correct. I did it according to the previous methods
+    const current_id =  parseInt(req.params.id);
+    if(current_id < 0)
+    {
+        res.status( status_codes.BAD_REQUEST );
+        res.send( "the current id is out of range");
+        return;
+    }
+    if(current_id === 1)
+    {
+        res.status( status_codes.FORBIDDEN );
+        res.send( "the current id is the admin user - he is always active");
+        return;
+    }
+    const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
+    if(idx_in_arr < 0)
+    {
+        res.status(status_codes.NOT_FOUND);
+        res.send("there is no such user in our users array");
+        return;
+    }
+    g_state.admin.restore_suspend_user(g_state.users[idx_in_arr]);
+    res.send(JSON.stringify( g_state.users) ); //new array
+}
+
+function suspend_user(req, res) {
+    ///Nikol: I hope that this is correct. I did it according to the previous methods
+    const current_id =  parseInt(req.params.id);
+    if(current_id < 0)
+    {
+        res.status( status_codes.BAD_REQUEST );
+        res.send( "the current id is out of range");
+        return;
+    }
+    if(current_id === 1)
+    {
+        res.status( status_codes.FORBIDDEN );
+        res.send( "the current id is the admin user - he is always active");
+        return;
+    }
+    const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
+    if(idx_in_arr < 0)
+    {
+        res.status(status_codes.NOT_FOUND);
+        res.send("there is no such user in our users array");
+        return;
+    }
+    g_state.admin.suspend_user(g_state.users[idx_in_arr]);
+    res.send(JSON.stringify( g_state.users) ); //new array
+}
+
+function approve_user(req, res) {
+    ///Nikol: I hope that this is correct. I did it according to the previous methods
+    const current_id =  parseInt(req.params.id);
+    if(current_id < 0)
+    {
+        res.status( status_codes.BAD_REQUEST );
+        res.send( "the current id is out of range");
+        return;
+    }
+    if(current_id === 1)
+    {
+        res.status( status_codes.FORBIDDEN );
+        res.send( "the current id is the admin user - he is always active");
+        return;
+    }
+    const idx_in_arr =  g_state.users.findIndex( user =>  user.id === current_id );
+    if(idx_in_arr < 0)
+    {
+        res.status(status_codes.NOT_FOUND);
+        res.send("there is no such user in our users array");
+        return;
+    }
+    g_state.admin.approve_join_request(g_state.users[idx_in_arr]);
+    res.send(JSON.stringify( g_state.users) ); //new array
+}
+
+function get_all_users(req, res) {
+    //TODO: check if correct
+    res.send(JSON.stringify( g_state.users) );
 }
 
 
