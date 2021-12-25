@@ -1,4 +1,4 @@
-const {g_state} = require("../JavaScript/g_state");
+const express = require('express');
 const {
     get_user,
     create_new_user,
@@ -9,7 +9,7 @@ const {
     get_all_users
 } = require('../controllers/admin_controller');
 
-const admin_router = g_state.express.Router();
+const admin_router = express.Router();
 
 admin_router.get('/user/(:id)', get_user);
 admin_router.post('/users', create_new_user);
