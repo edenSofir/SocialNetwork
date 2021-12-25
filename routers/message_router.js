@@ -1,7 +1,7 @@
 const {g_state} = require("../JavaScript/g_state");
 const {
     send_a_message,
-} = require('controllers/message_controller');
+} = require('../controllers/message_controller');
 
 const message_router = g_state.express.Router();
 

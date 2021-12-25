@@ -7,7 +7,7 @@ const {
     suspend_user,
     approve_user,
     get_all_users
-} = require('controllers/admin_controller');
+} = require('../controllers/admin_controller');
 
 const admin_router = g_state.express.Router();
 

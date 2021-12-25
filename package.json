@@ -1,24 +1,9 @@
 {
-  "name": "socialnetwork",
+  "name": "SocialNetwork",
   "version": "1.0.0",
+  "main": "server.js",
   "dependencies": {
     "express": "^4.17.1",
     "http-status-codes": "^2.1.4"
-  },
-  "description": "Date: 12/12/2021 Exercise 2 in JavaScript Course Nikol Rafalovich 208001693 nikolra@mta.ac.il Eden Sofir 315900019 edenso@mta.ac.il",
-  "main": "index.js",
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/edenSofir/SocialNetwork.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/edenSofir/SocialNetwork/issues"
-  },
-  "homepage": "https://github.com/edenSofir/SocialNetwork#readme"
+  }
 }
