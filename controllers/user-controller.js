@@ -1,5 +1,7 @@
 const express = require("express");
+const admin_services = require('../services/AdminServices');
 const status_codes = require('http-status-codes').StatusCodes;
+
 
 
 const router = express.Router();
@@ -75,7 +77,7 @@ function delete_current_user(req, res) {
         res.send("there is no such user in our users array");
         return;
     }
-    g_state.admin.delete_user(g_state.users[idx_in_arr]);//admin deletes the user
+    //--//(g_state.users[idx_in_arr]);//admin deletes the user
     //g_state.users.splice(idx_in_arr, 1);
     ///Nikol: moved to the delete function in Admin.js
     res.send(JSON.stringify( g_state.users) ); //new array
