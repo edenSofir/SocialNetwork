@@ -24,10 +24,14 @@ class User{
     }
 
     delete_post(post) {
+
         if (this.status === Status.active) {
             const index = get_post_index(this, post);
             this.posts.slice(index, 1);
+            return true;
         }
+
+        return false;
     }
 
     send_message(recipient, text) {
@@ -36,13 +40,23 @@ class User{
             const message = new Message(text, g_state.message_id, this);
             g_state.message_id += 1;
             recipient.messages.push(message);
+            return true;
         }
+        return false;
     }
     
     delete() {
-        if(this.status === Status.active)
-            g_state.admin.delete_user(this);
-        //TODO: can a suspended user delete himself?
+        if(this.status === Status.active) {
+            //TODO: code duplication
+            g_state.users.forEach((user, index) => {
+                if (user.id === this.id) {
+                    g_state.users.splice(index, 1);
+                }
+            });
+            return true;
+        }
+
+        return false;
     }
 }
 
