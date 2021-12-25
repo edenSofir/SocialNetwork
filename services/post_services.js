@@ -15,3 +15,5 @@ delete_current_post = function (current_user, post_id)
 {
     current_user.delete_post(post_id);
 }
+
+module.exports = {publish_current_post, get_all_posts_from_users, delete_current_post}
