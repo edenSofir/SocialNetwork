@@ -1,6 +1,9 @@
 const admin_services = require('../services/admin_services');
-const data_base = require('./JavaScript/data_base');
+const data_base = require('../JavaScript/data_base');
 const {g_state} = require("../JavaScript/g_state");
+const bcrypt = require("bcryptjs");
+const user = require("../models/User");
+const jwt = require("jsonwebtoken");
 
 function find_user_by_token(token) {
 
@@ -14,41 +17,52 @@ function find_user_by_token(token) {
 
 function get_user(req, res) {
     const token = parseInt(req.headers.token);
-    const user = find_user_by_token(token);
-    if (!user) {
+    const current_user = find_user_by_token(token);
+    if (!current_user) {
         res.status(g_state.status_codes.BAD_REQUEST);
         res.send("the current token isn't valid");
         return;
     }
-    res.send(JSON.stringify(user));
+    console.log(current_user);
+    res.send(JSON.stringify(current_user));
 }
 
-/*function create_new_user(req, res) {
+async function create_new_user(req, res) {
+    try {
+        const {full_name, email, password} = req.body;
+        //console.log(full_name, email, password);
+        if (!(password && email && full_name)) {
+            res.status(400).send("all input required. please try again");
+            return;
+        }
+        const is_user_exist = await g_state.find_user_by_email(email);
+        if (is_user_exist) {
+            res.status(409).send("user is already exist. please preform login");
+            return;
+        }
 
-    const full_name = req.body.full_name;
-    if (!full_name) {
-        res.status(g_state.status_codes.BAD_REQUEST);
-        res.send("No name specified in the current request");
-        return;
+        const encrypted_password = await bcrypt.hash(password, 10);
+        const id = g_state.user_id += 1;
+        const new_user = await new user.User(full_name, id, email.toLowerCase(), encrypted_password);
+        const token = jwt.sign(
+            {
+                user_id: new_user.id,
+                email: email,
+            },
+            "kjnkjnhkjnljn35213541dgvrf351",
+            {
+                expiresIn: "10min",
+            });
+        new_user.token = token;
+        g_state.users.push(new_user);
+        console.log(g_state.users);
+        res.status(201).send(JSON.stringify(new_user));
     }
-    const id = g_state.user_id += 1;
-    const email = req.body.email_address;
-    if (!email) {
-        res.status(g_state.status_codes.BAD_REQUEST);
-        res.send("No email specified in the current request");
-        return;
+    catch (err)
+    {
+        console.log(err);
     }
-    const password = req.body.password;
-    if (!password) {
-        res.status(g_state.status_codes.BAD_REQUEST);
-        res.send("No password specified in the current request");
-        return;
-    }
-
-    const new_user = new g_state.User(full_name, id, email, password);
-    g_state.users.push(new_user);
-    res.send(JSON.stringify(new_user));
-}*/
+}
 
 function delete_current_user(req, res) {
     const token = parseInt(req.headers.token);
@@ -106,24 +120,19 @@ function suspend_user(req, res) {
 }
 
 function approve_user(req, res) {
-    const current_id = parseInt(req.params.id);
-    if (current_id < 0) {
-        res.status(g_state.status_codes.BAD_REQUEST);
-        res.send("the current id is out of range");
-        return;
-    }
-    if (current_id === 1) {
-        res.status(g_state.status_codes.FORBIDDEN);
-        res.send("the current id is the admin user - already active");
-        return;
-    }
-    const idx_in_arr = g_state.users.findIndex(user => user.id === current_id);
-    if (idx_in_arr < 0) {
+    const token = parseInt(req.headers.token);
+    const user = find_user_by_token(token);
+    if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    admin_services.approve_join_request(g_state.users[idx_in_arr]);
+    if (user.id === 1) {
+        res.status(g_state.status_codes.FORBIDDEN);
+        res.send("the current id is the admin user - already active");
+        return;
+    }
+    admin_services.approve_join_request(user);
     data_base.save_data_to_file().then(r => console.log("saved data updated"));
     res.send(JSON.stringify(g_state.users)); //new array
 }

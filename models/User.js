@@ -1,5 +1,4 @@
 const g_state = require("../JavaScript/g_state");
-const {find_user_by_id, find_user_by_email} = require("./User");
 
 class User{
 
@@ -61,24 +60,6 @@ class User{
 
         return false;
     }
-
-    find_user_by_id(id) {
-        g_state.g_state.users.forEach((user) => {
-            if(user.id === id)
-                return user;
-        });
-
-        return null;
-    }
-
-    find_user_by_email(email){
-        g_state.g_state.users.forEach((user) => {
-            if(user.email_address === email)
-                return user;
-        });
-
-        return null;
-    }
 }
 
 function get_post_index(user, post_to_find){
@@ -90,6 +71,14 @@ function get_post_index(user, post_to_find){
     return -1;
 }
 
+function find_user_by_id(id) {
+    g_state.g_state.users.forEach((user) => {
+        if(user.id === id)
+            return user;
+    });
+
+    return null;
+}
 
 const Status = {
     created : 1,
@@ -97,5 +86,5 @@ const Status = {
     suspended : 3,
     deleted : 4
 };
-module.exports = { User, find_user_by_id, find_user_by_email ,Status  }
+module.exports = { User, find_user_by_id ,Status  }
 

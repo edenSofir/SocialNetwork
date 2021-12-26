@@ -17,6 +17,15 @@ g_state.router = g_state.express.Router();
 g_state.users = [g_state.admin];
 g_state.admin.status = users.Status.active;
 
+
+g_state.find_user_by_email = function(email){
+    g_state.users.forEach((user) => {
+        if(user.email_address === email)
+            return user;
+    });
+
+    return null;
+}
 module.exports = { g_state  }
 
 

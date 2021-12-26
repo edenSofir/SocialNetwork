@@ -11,7 +11,7 @@ const {
 
 const router = express.Router();
 
-router.route('/user/(:id)')
+router.route('/user/(:token)')
     .get(get_user)
     .delete(delete_current_user)
     .put(restore_user);
