@@ -6,4 +6,5 @@ delete_user_account = function (sender_id)
     return user.delete();
 }
 
+
 module.exports = { delete_user_account }

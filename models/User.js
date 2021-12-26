@@ -1,4 +1,5 @@
 const g_state = require("../JavaScript/g_state");
+const {find_user_by_id} = require("./User");
 
 class User{
 
@@ -11,6 +12,7 @@ class User{
         this.status = Status.created;
         this.posts = [];
         this.messages = [];
+        this.token = null ;
     };
 
     publish_post(text){
@@ -59,6 +61,15 @@ class User{
 
         return false;
     }
+
+    find_user_by_id(id) {
+        g_state.g_state.users.forEach((user) => {
+            if(user.id === id)
+                return user;
+        });
+
+        return null;
+    }
 }
 
 function get_post_index(user, post_to_find){
@@ -70,11 +81,12 @@ function get_post_index(user, post_to_find){
     return -1;
 }
 
+
 const Status = {
     created : 1,
     active : 2,
     suspended : 3,
     deleted : 4
 };
-module.exports = { User, Status  }
+module.exports = { User, find_user_by_id, Status  }
 

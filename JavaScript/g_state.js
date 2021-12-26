@@ -11,14 +11,6 @@ const g_state = {
     express : require("express"),
     status_codes : require('http-status-codes').StatusCodes,
 
-    find_user_by_id : function(id) {
-        this.users.forEach((user) => {
-           if(user.id === id)
-               return user;
-        });
-
-        return null;
-    }
 }
 g_state.app = g_state.express();
 g_state.router = g_state.express.Router();

@@ -25,6 +25,7 @@ function delete_user_account(req, res) {
     res.send(JSON.stringify(g_state.g_state.users));
 }
 
+
 module.exports = {
     delete_user_account
 }
