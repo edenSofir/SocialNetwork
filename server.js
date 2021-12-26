@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-
+const jwt = require('jsonwebtoken');
+const user = require('./models/User');
 app.use(express.urlencoded(
    {
       extended: true
@@ -56,3 +57,33 @@ app.post('/register', async (req, res) =>
         console.log(err);
     }
 })
+
+app.post("/login", async (req, res) => {
+
+    try {
+        const { email, password } = req.body;
+
+        if (!(email && password)) {
+            res.status(400).send("All input is required");
+        }
+
+        const user = await user.find_user_by_email(email) ;
+
+        if (user && (await bcrypt.compare(password, user.password))) {
+            // Create token
+            const token = jwt.sign(
+                { user_id: user.id, email },
+                process.env.TOKEN_KEY,
+                {
+                    expiresIn: "10h",
+                }
+            );
+            user.token = token;
+
+            res.status(200).json(user);
+        }
+        res.status(400).send("Invalid Credentials");
+    } catch (err) {
+        console.log(err);
+    }
+});

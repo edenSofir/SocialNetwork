@@ -70,6 +70,15 @@ class User{
 
         return null;
     }
+
+    find_user_by_email(email){
+        g_state.g_state.users.forEach((user) => {
+            if(user.email_address === email)
+                return user;
+        });
+
+        return null;
+    }
 }
 
 function get_post_index(user, post_to_find){
@@ -88,5 +97,5 @@ const Status = {
     suspended : 3,
     deleted : 4
 };
-module.exports = { User, find_user_by_id, Status  }
+module.exports = { User, find_user_by_id, find_user_by_email ,Status  }
 
