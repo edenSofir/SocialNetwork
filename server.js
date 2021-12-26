@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
-const
+const jwt = require('jsonwebtoken');
+const user = require('./models/User');
 app.use(express.urlencoded(
    {
       extended: true
