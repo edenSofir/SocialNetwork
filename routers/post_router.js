@@ -8,8 +8,11 @@ const {
 
 const post_router = g_state.express.Router();
 
-post_router.post('/user/(:id)', post_post);
-post_router.get('/users', get_all_posts);
-post_router.put('/user/(:id)', delete_current_post);
+post_router.route('/user/(:id)')
+    .post(post_post)
+    .put(delete_current_post)
+
+post_router.route('/users')
+    .get(get_all_posts);
 
 module.exports = post_router;
