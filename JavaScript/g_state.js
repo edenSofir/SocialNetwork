@@ -10,11 +10,10 @@ const g_state = {
     port : 2718,
     express : require("express"),
     status_codes : require('http-status-codes').StatusCodes,
-
+    users: []
 }
 g_state.app = g_state.express();
 g_state.router = g_state.express.Router();
-g_state.users = [g_state.admin];
 g_state.admin.status = users.Status.active;
 g_state.admin.token = 0;
 

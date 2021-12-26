@@ -7,7 +7,9 @@ g_state.g_state.filePath = g_state.g_state.path.join(__dirname, '/SocialNetworkD
 
 async function save_data_to_file() {
 
-    const data_to_save = { users: g_state.g_state.users, user_id: g_state.g_state.user_id, post_id: g_state.g_state.post_id}
+    const data_to_save = { users: g_state.g_state.users,
+        user_id: g_state.g_state.user_id,
+        post_id: g_state.g_state.post_id}
     const json = JSON.stringify(data_to_save);
 
     await g_state.g_state.fs.writeFile(g_state.g_state.filePath, json);
@@ -17,14 +19,14 @@ async function save_data_to_file() {
 
 async function read_data_from_file() {
 
-    console.log("TEST!");
     const json = g_state.g_state.fs.readFile(g_state.g_state.filePath, 'utf8');
     const data_to_save = JSON.parse(await json);
     g_state.users = data_to_save.users;
+
+    console.log("loaded:", g_state.users);
+
     g_state.user_id = data_to_save.user_id;
     g_state.post_id = data_to_save.post_id;
 }
 
 module.exports = {save_data_to_file, read_data_from_file};
-//save_data_to_file().then(r => console.log("finished"));
-//read_data_from_file().then(r => console.log(g_state.users));

@@ -52,6 +52,7 @@ send_message_to_all_users = function (message_to_send) {
 
 get_all_users = function ()
 {
+    console.log("sowed: ", g_state.g_state.users);
     return g_state.g_state.users;
 }
 

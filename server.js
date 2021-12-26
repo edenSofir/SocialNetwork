@@ -17,15 +17,13 @@ app.use("/admin", admin_router);
 app.use("/post", post_router);
 app.use("/message", message_router);
 
-/*app.get("/",(req, res) => {
-    console.log("TEST2!");
+app.listen(2718, () => {
+
     data_base.read_data_from_file()
-        .then(r => console.log("data read.", r))
-        .catch(err => console.log(err));
-    res.status(200).send("date read");
+    console.log(g_state.users);
+    if(!(g_state.users.find(user => user.id === 0)))
+        g_state.users.push(g_state.admin);
 });
-*/
-app.listen(2718, () => data_base.read_data_from_file());
 
 app.post("/login", async (req, res) => {
 
