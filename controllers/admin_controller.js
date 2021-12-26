@@ -7,23 +7,18 @@ const jwt = require("jsonwebtoken");
 
 function find_user_by_token(token) {
 
-    g_state.users.forEach((user => {
-        if(user.token === token)
-            return user;
-    }));
+    return g_state.users.find(user => user.token === token);
 
-    return null;
 }
 
 function get_user(req, res) {
-    const token = parseInt(req.headers.token);
+    const token = req.headers.token;
     const current_user = find_user_by_token(token);
     if (!current_user) {
         res.status(g_state.status_codes.BAD_REQUEST);
         res.send("the current token isn't valid");
         return;
     }
-    console.log(current_user);
     res.send(JSON.stringify(current_user));
 }
 
@@ -55,7 +50,6 @@ async function create_new_user(req, res) {
             });
         new_user.token = token;
         g_state.users.push(new_user);
-        console.log(g_state.users);
         res.status(201).send(JSON.stringify(new_user));
     }
     catch (err)

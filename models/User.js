@@ -72,12 +72,9 @@ function get_post_index(user, post_to_find){
 }
 
 function find_user_by_id(id) {
-    g_state.g_state.users.forEach((user) => {
-        if(user.id === id)
-            return user;
-    });
 
-    return null;
+    return g_state.g_state.users.find(user => user.id === id);
+
 }
 
 const Status = {
