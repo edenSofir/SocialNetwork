@@ -22,9 +22,6 @@ async function read_data_from_file() {
     const json = g_state.g_state.fs.readFile(g_state.g_state.filePath, 'utf8');
     const data_to_save = JSON.parse(await json);
     g_state.users = data_to_save.users;
-
-    console.log("loaded:", g_state.users);
-
     g_state.user_id = data_to_save.user_id;
     g_state.post_id = data_to_save.post_id;
 }
