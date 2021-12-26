@@ -3,7 +3,7 @@ const g_state = require("../JavaScript/g_state");
 
 
 function get_user(req, res) {
-    const current_id = parseInt(req.params.id);
+    const token = parseInt(req.headers.token);
 
     if (current_id < 0) {
         res.status(g_state.g_state.status_codes.BAD_REQUEST);

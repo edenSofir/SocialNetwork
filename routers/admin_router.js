@@ -9,14 +9,22 @@ const {
     get_all_users
 } = require('../controllers/admin_controller');
 
-const admin_router = express.Router();
+const router = express.Router();
 
-admin_router.get('/user/(:id)', get_user);
-admin_router.post('/users', create_new_user);
-admin_router.put('/user/(:id)',delete_current_user);
-admin_router.put('/user/(:id)', restore_user);
-admin_router.put('/user/(:id)', suspend_user);
-admin_router.put('/user/(:id)', approve_user);
-admin_router.get('/users', get_all_users);
+router.route('/user/(:id)')
+    .get(get_user)
+    .delete(delete_current_user)
+    .put(restore_user);
 
-module.exports = admin_router;
+router.route('/user/approve/(:id)')
+    .post(approve_user);
+
+router.route('/user')
+    .post(create_new_user)
+    .get(get_all_users);
+
+router.route('/user/suspend/(:id)')
+    .put(suspend_user);
+
+
+module.exports = router;

@@ -24,5 +24,6 @@ async function read_data_from_file() {
     g_state.post_id = data_to_save.post_id;
 }
 
+module.exports = {save_data_to_file, read_data_from_file};
 //save_data_to_file().then(r => console.log("finished"));
 //read_data_from_file().then(r => console.log(g_state.users));
