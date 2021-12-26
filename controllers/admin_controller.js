@@ -25,7 +25,6 @@ function get_user(req, res) {
 async function create_new_user(req, res) {
     try {
         const {full_name, email, password} = req.body;
-        //console.log(full_name, email, password);
         if (!(password && email && full_name)) {
             res.status(400).send("all input required. please try again");
             return;
@@ -50,6 +49,7 @@ async function create_new_user(req, res) {
             });
         new_user.token = token;
         g_state.users.push(new_user);
+        data_base.save_data_to_file().then(r => console.log("saved data updated"));
         res.status(201).send(JSON.stringify(new_user));
     }
     catch (err)

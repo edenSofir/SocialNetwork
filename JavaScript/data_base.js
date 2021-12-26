@@ -17,6 +17,7 @@ async function save_data_to_file() {
 
 async function read_data_from_file() {
 
+    console.log("TEST!");
     const json = g_state.g_state.fs.readFile(g_state.g_state.filePath, 'utf8');
     const data_to_save = JSON.parse(await json);
     g_state.users = data_to_save.users;
