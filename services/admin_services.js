@@ -18,7 +18,6 @@ suspend_user = function (current_user) {
 
 delete_user = function (current_user) {
 
-    current_user.status = g_state.g_state.Status.deleted;
     g_state.g_state.users.forEach((user, index) => {
         if (user.id === current_user.id) {
             g_state.g_state.users.splice(index, 1);

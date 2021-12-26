@@ -59,19 +59,21 @@ async function create_new_user(req, res) {
 }
 
 function delete_current_user(req, res) {
-    const token = parseInt(req.headers.token);
+    const token = req.headers.token;
     const user = find_user_by_token(token);
     if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    if (user.id === 1) {
+    if (user.id === 0) {
         res.status(g_state.status_codes.FORBIDDEN);
         res.send("the current id is the admin user - he can not be deleted");
         return;
     }
+    console.log("before delete: ", g_state.users);
     admin_services.delete_user(user);//admin deletes the user
+    console.log("after delete: ", g_state.users);
     data_base.save_data_to_file().then(r => console.log("saved data updated"));
     res.send(JSON.stringify(g_state.users)); //new array
 }
