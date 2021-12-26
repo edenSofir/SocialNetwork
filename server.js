@@ -17,15 +17,15 @@ app.use("/admin", admin_router);
 app.use("/post", post_router);
 app.use("/message", message_router);
 
-app.get("/",(req, res) => {
+/*app.get("/",(req, res) => {
     console.log("TEST2!");
     data_base.read_data_from_file()
         .then(r => console.log("data read.", r))
         .catch(err => console.log(err));
     res.status(200).send("date read");
 });
-
-app.listen(2718, () => console.log(`server started on port ${2718}`));
+*/
+app.listen(2718, () => data_base.read_data_from_file());
 
 app.post("/login", async (req, res) => {
 
