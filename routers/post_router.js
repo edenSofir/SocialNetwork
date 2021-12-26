@@ -4,7 +4,7 @@ const {
     post_post,
     get_all_posts,
     delete_current_post
-} = require('../controllers/admin_controller');
+} = require('../controllers/post_controller');
 
 const post_router = g_state.express.Router();
 
