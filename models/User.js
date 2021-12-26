@@ -1,5 +1,5 @@
 const g_state = require("../JavaScript/g_state");
-const {find_user_by_id} = require("./User");
+const {find_user_by_id, find_user_by_email} = require("./User");
 
 class User{
 
