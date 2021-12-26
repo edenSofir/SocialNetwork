@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+const
 app.use(express.urlencoded(
    {
       extended: true
@@ -48,7 +48,7 @@ app.post('/register', async (req, res) =>
                }
            );
            new_user.token = token;
-           res.status(201).json(user);
+           res.status(201).json(new_user);
        }
     }
     catch (err)
