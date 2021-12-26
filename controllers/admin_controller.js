@@ -77,20 +77,22 @@ function delete_current_user(req, res) {
 }
 
 function restore_user(req, res) {
-    const token = parseInt(req.headers.token);
+    const token = req.headers.token;
     const user = find_user_by_token(token);
+    console.log("before restore: ", user);
     if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    if (user.id === 1) {
+    if (user.id === 0) {
         res.status(g_state.status_codes.FORBIDDEN);
         res.send("the current id is the admin user - allways active");
         return;
     }
 
     admin_services.restore_suspend_user(user);
+    console.log("after restore: ", user);
     data_base.save_data_to_file().then(r => console.log("saved data updated"));
     res.send(JSON.stringify(g_state.users)); //new array
 }
@@ -98,7 +100,6 @@ function restore_user(req, res) {
 function suspend_user(req, res) {
     const token = req.headers.token;
     const user = find_user_by_token(token);
-    console.log("before suspended: ", user);
     if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
@@ -110,13 +111,12 @@ function suspend_user(req, res) {
         return;
     }
     admin_services.suspend_user(user);
-    console.log("after suspended: ", user);
     data_base.save_data_to_file().then(r => "saved data updated");
     res.send(JSON.stringify(g_state.users)); //new array
 }
 
 function approve_user(req, res) {
-    const token = parseInt(req.headers.token);
+    const token = req.headers.token;
     const user = find_user_by_token(token);
     if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
