@@ -22,32 +22,3 @@ app.use("/message", message_router);
 app.listen(2718, () => {
     data_base.read_data_from_file().then(r => {console.log("starts admin creation"); admin.create_admin().then(r => console.log("admin create") );});
 });
-
-app.post("/login", async (req, res) => {
-
-    try {
-        const { email, password } = req.body;
-
-        if (!(email && password)) {
-            res.status(400).send("All input is required");
-        }
-
-        const user = await g_state.find_user_by_email(email) ;
-
-        if (user && (await bcrypt.compare(password, user.password))) {
-            const token = jwt.sign(
-                { user_id: user.id, email },
-                "kjnkjnhkjnljn35213541dgvrf351",
-                {
-                    expiresIn: "10min",
-                }
-            );
-            user.token = token;
-
-            res.status(200).json(user);
-        }
-        res.status(400).send("Invalid Credentials");
-    } catch (err) {
-        console.log(err);
-    }
-});
