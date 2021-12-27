@@ -6,7 +6,8 @@ const {
     restore_user,
     suspend_user,
     approve_user,
-    get_all_users
+    get_all_users,
+    send_message_to_all
 } = require('../controllers/admin_controller');
 
 const router = express.Router();
@@ -25,6 +26,9 @@ router.route('/user')
 
 router.route('/user/suspend')
     .put(suspend_user);
+
+router.route('/user/message')
+    .post(send_message_to_all)
 
 
 module.exports = router;

@@ -1,10 +1,9 @@
 const user = require("../models/User");
 const data_base = require("../JavaScript/data_base");
 const g_state = require('../JavaScript/g_state');
-const Console = require("console");
 
 const create_admin = async function () {
-    Console.log(g_state.users)
+    console.log(g_state.users)
     if(!g_state.users.find(user => user.full_name === 'Admin')) {
         const admin = new user.User("Admin",0,"admin@admin.com","admin");
         admin.token = 0 ;
@@ -17,4 +16,4 @@ const create_admin = async function () {
     }
 }
 
-module.exports = {create_admin}
+module.exports = {create_admin, admin}
