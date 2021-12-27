@@ -18,9 +18,7 @@ app.use("/post", post_router);
 app.use("/message", message_router);
 
 app.listen(2718, () => {
-    data_base.read_data_from_file();
-
-    g_state.createAdmin();
+    data_base.read_data_from_file().then(r => {console.log("starts admin creation"); g_state.create_admin();});
 });
 
 app.post("/login", async (req, res) => {

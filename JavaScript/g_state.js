@@ -1,5 +1,6 @@
 const {StatusCodes: status_codes} = require("http-status-codes");
 const users = require("../models/User");
+const data_base = require("./data_base");
 
 const g_state = {
     file_name: "",
@@ -23,15 +24,14 @@ g_state.find_user_by_email = function(email){
 }
 module.exports = { g_state }
 
-g_state.createAdmin = function ()
-{
+g_state.create_admin = async function (){
     if(!g_state.users.find(user => user.name === 'admin'))
     {
         const admin = new users.User("Admin",0,"admin@admin.com","admin");
         admin.token = 0 ;
-        admin.status = users.Status.active
+        admin.status = users.Status.active;
         g_state.users.push(admin);
-        console.log(users.User);
+        await data_base.save_data_to_file();
     }
     else
     {
