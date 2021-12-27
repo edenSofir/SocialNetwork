@@ -8,7 +8,6 @@ const create_admin =async function () {
         admin.token = 0 ;
         admin.status = user.Status.active
         g_state.users.push(admin);
-        console.log(g_state.users);
         await data_base.save_data_to_file()
     } else {
         console.log("admin already exist");

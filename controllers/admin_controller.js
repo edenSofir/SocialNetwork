@@ -1,6 +1,6 @@
 const admin_services = require('../services/admin_services');
 const data_base = require('../JavaScript/data_base');
-const {g_state} = require("../JavaScript/g_state");
+const g_state = require("../JavaScript/g_state");
 const bcrypt = require("bcryptjs");
 const user = require("../models/User");
 const jwt = require("jsonwebtoken");
@@ -10,7 +10,7 @@ const status_codes = require("http-status-codes").StatusCodes;
 
 function get_user(req, res) {
     const token = req.headers.token;
-    const current_user = find_user_by_token(token);
+    const current_user = g_state.find_user_by_token(token);
     if (!current_user) {
         res.status(status_codes.BAD_REQUEST);
         res.send("the current token isn't valid");
@@ -57,7 +57,7 @@ async function create_new_user(req, res) {
 
 function delete_current_user(req, res) {
     const token = req.headers.token;
-    const user = find_user_by_token(token);
+    const user = g_state.find_user_by_token(token);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
@@ -75,7 +75,7 @@ function delete_current_user(req, res) {
 
 function restore_user(req, res) {
     const token = req.headers.token;
-    const user = find_user_by_token(token);
+    const user = g_state.find_user_by_token(token);
     console.log("before restore: ", user);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
@@ -96,7 +96,7 @@ function restore_user(req, res) {
 
 function suspend_user(req, res) {
     const token = req.headers.token;
-    const user = find_user_by_token(token);
+    const user = g_state.find_user_by_token(token);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
@@ -114,7 +114,7 @@ function suspend_user(req, res) {
 
 function approve_user(req, res) {
     const token = req.headers.token;
-    const user = find_user_by_token(token);
+    const user = g_state.find_user_by_token(token);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
