@@ -7,7 +7,7 @@ const app = express();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const user = require('./models/User');
-const {g_state} = require("./JavaScript/g_state");
+const g_state = require("./JavaScript/g_state");
 app.use(express.urlencoded(
    {
       extended: true

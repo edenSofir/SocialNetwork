@@ -6,11 +6,7 @@ const user = require("../models/User");
 const jwt = require("jsonwebtoken");
 const status_codes = require("http-status-codes").StatusCodes;
 
-function find_user_by_token(token) {
 
-    return g_state.users.find(user => user.token === token);
-
-}
 
 function get_user(req, res) {
     const token = req.headers.token;

@@ -1,28 +1,28 @@
 const g_state = require("../JavaScript/g_state");
-g_state.g_state.fs = require('fs').promises;
-g_state.g_state.path = require('path');
-g_state.g_state.filePath = g_state.g_state.path.join(__dirname, '/SocialNetworkData.txt');
+const fs = require('fs').promises;
+const path = require('path');
+const filePath = path.join(__dirname, '/SocialNetworkData.txt');
 
 
 
 async function save_data_to_file() {
 
-    const data_to_save = { users: g_state.g_state.users,
-        user_id: g_state.g_state.user_id,
-        post_id: g_state.g_state.post_id,
-        message_id : g_state.g_state.message_id
+    const data_to_save = { users: g_state.users,
+        user_id: g_state.user_id,
+        post_id: g_state.post_id,
+        message_id : g_state.message_id
     }
     const json = JSON.stringify(data_to_save);
 
-    await g_state.g_state.fs.writeFile(g_state.g_state.filePath, json);
+    await fs.writeFile(filePath, json);
 
 
 }
 
 async function read_data_from_file() {
-    if((!(await g_state.g_state.fs.readFile(g_state.g_state.filePath))).length === 0)
+    if((!(await fs.readFile(filePath))).length === 0)
     {
-        const json = g_state.g_state.fs.readFile(g_state.g_state.filePath, 'utf8');
+        const json = fs.readFile(filePath, 'utf8');
         const data_to_save = JSON.parse(await json);
         g_state.users = data_to_save.users;
         g_state.user_id = data_to_save.user_id;
