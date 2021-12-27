@@ -1,3 +1,5 @@
+const {StatusCodes: status_codes} = require("http-status-codes");
+const data_base = require("./data_base");
 const user = require("../models/User");
 
 const message_id = 1;
@@ -10,7 +12,8 @@ const users = [];
 const find_user_by_email = function(email) {
     return users.find(user => user.email_address === email);
 }
-
+const find_user_by_email = function(email){
+    return users.find(user => user.email_address === email);
 
 function find_user_by_id(id) {
 
