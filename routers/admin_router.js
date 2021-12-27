@@ -16,7 +16,7 @@ router.route('/get_user')
     .delete(delete_current_user)
     .put(restore_user);
 
-router.route('/user/approve/(:id)')
+router.route('/user/approve')
     .post(approve_user);
 
 router.route('/user')
