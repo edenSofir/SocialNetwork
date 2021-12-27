@@ -1,5 +1,6 @@
 const message_services = require('../services/message_services');
 const g_state = require("../JavaScript/g_state");
+const status_codes = require("http-status-codes").StatusCodes;
 
 
 function send_a_message(req, res) {
@@ -8,31 +9,31 @@ function send_a_message(req, res) {
     const recipient_id = parseInt(recipient);
 
     if (current_id < 0 || recipient_id < 0) {
-        res.status(g_state.g_state.status_codes.BAD_REQUEST);
+        res.status(status_codes.BAD_REQUEST);
         res.send("the current id is out of range");
         return;
     }
     if (current_id === recipient_id) {
-        res.status(g_state.g_state.status_codes.BAD_REQUEST);
+        res.status(status_codes.BAD_REQUEST);
         res.send("Two identical id");
         return;
     }
     if (text === null || text === undefined) {
-        res.status(g_state.g_state.status_codes.BAD_REQUEST);
+        res.status(status_codes.BAD_REQUEST);
         res.send("No text to send");
         return;
     }
-    const user = g_state.g_state.find_user_by_id(recipient_id)
+    const user = g_state.find_user_by_id(recipient_id)
     if (user === null) {
-        res.status(g_state.g_state.status_codes.NOT_FOUND);
+        res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
 
     if (!message_services.send_a_message(current_id, user, text)) {
-        res.status(g_state.g_state.status_codes.FORBIDDEN);
+        res.status(status_codes.FORBIDDEN);
     }
-    res.send(JSON.stringify(g_state.g_state.users)); //new array
+    res.send(JSON.stringify(g_state.users)); //new array
 }
 
 module.exports = {

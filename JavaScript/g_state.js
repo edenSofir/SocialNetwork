@@ -1,5 +1,8 @@
 const user = require("../models/User");
 
+const message_id = 1;
+const user_id = 0;
+const post_id = 1;
 const admin = new user.User("Admin",0,"admin@admin.com","admin");
 admin.token = 0;
 
@@ -8,21 +11,19 @@ const find_user_by_email = function(email) {
     return users.find(user => user.email_address === email);
 }
 
-const message_id = 1;
-const user_id = 0;
-const post_id = 1;
 
+function find_user_by_id(id) {
 
-module.exports = { admin, find_user_by_email,  users, message_id, user_id, post_id};
+    return users.find(user => user.id === id);
+}
 
-g_state.createAdmin = function ()
-{
-    if(!g_state.users.find(user => user.name === 'admin'))
+const create_admin = function () {
+    if(!users.find(user => user.name === 'admin'))
     {
         const admin = new users.User("Admin",0,"admin@admin.com","admin");
         admin.token = 0 ;
         admin.status = users.Status.active
-        g_state.users.push(admin);
+        users.push(admin);
         console.log(users.User);
     }
     else
@@ -31,6 +32,11 @@ g_state.createAdmin = function ()
     }
 }
 
-module.exports = { g_state  }
+
+
+module.exports = { admin, find_user_by_email,  users, message_id, user_id, post_id, create_admin, find_user_by_id};
+
+
+
 
 

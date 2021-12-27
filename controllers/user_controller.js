@@ -1,7 +1,6 @@
 const user_services = require('../services/user_service');
 const g_state = require("../JavaScript/g_state");
 
-
 function delete_user_account(req, res) {
     const current_id = parseInt(req.params.id);
     if (current_id < 0) {

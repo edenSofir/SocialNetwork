@@ -1,4 +1,6 @@
-const {g_state} = require("../JavaScript/g_state");
+const g_state = require("../JavaScript/g_state");
+const express = require('express');
+
 
 const {
     post_post,
@@ -6,7 +8,7 @@ const {
     delete_current_post
 } = require('../controllers/post_controller');
 
-const post_router = g_state.express.Router();
+const post_router = express.Router();
 
 post_router.route('/user/(:id)')
     .post(post_post)

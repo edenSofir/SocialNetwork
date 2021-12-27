@@ -4,6 +4,7 @@ const {g_state} = require("../JavaScript/g_state");
 const bcrypt = require("bcryptjs");
 const user = require("../models/User");
 const jwt = require("jsonwebtoken");
+const status_codes = require("http-status-codes").StatusCodes;
 
 function find_user_by_token(token) {
 
@@ -15,7 +16,7 @@ function get_user(req, res) {
     const token = req.headers.token;
     const current_user = find_user_by_token(token);
     if (!current_user) {
-        res.status(g_state.status_codes.BAD_REQUEST);
+        res.status(status_codes.BAD_REQUEST);
         res.send("the current token isn't valid");
         return;
     }
@@ -62,12 +63,12 @@ function delete_current_user(req, res) {
     const token = req.headers.token;
     const user = find_user_by_token(token);
     if (!user) {
-        res.status(g_state.status_codes.NOT_FOUND);
+        res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
     if (user.id === 0) {
-        res.status(g_state.status_codes.FORBIDDEN);
+        res.status(status_codes.FORBIDDEN);
         res.send("the current id is the admin user - he can not be deleted");
         return;
     }
@@ -81,12 +82,12 @@ function restore_user(req, res) {
     const user = find_user_by_token(token);
     console.log("before restore: ", user);
     if (!user) {
-        res.status(g_state.status_codes.NOT_FOUND);
+        res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
     if (user.id === 0) {
-        res.status(g_state.status_codes.FORBIDDEN);
+        res.status(status_codes.FORBIDDEN);
         res.send("the current id is the admin user - allways active");
         return;
     }
@@ -101,12 +102,12 @@ function suspend_user(req, res) {
     const token = req.headers.token;
     const user = find_user_by_token(token);
     if (!user) {
-        res.status(g_state.status_codes.NOT_FOUND);
+        res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
     if (user.id === 0) {
-        res.status(g_state.status_codes.FORBIDDEN);
+        res.status(status_codes.FORBIDDEN);
         res.send("the current id is the admin user - already active");
         return;
     }
@@ -119,12 +120,12 @@ function approve_user(req, res) {
     const token = req.headers.token;
     const user = find_user_by_token(token);
     if (!user) {
-        res.status(g_state.status_codes.NOT_FOUND);
+        res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    if (user.id === 1) {
-        res.status(g_state.status_codes.FORBIDDEN);
+    if (user.id === 0) {
+        res.status(status_codes.FORBIDDEN);
         res.send("the current id is the admin user - already active");
         return;
     }

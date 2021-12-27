@@ -1,4 +1,4 @@
-const {g_state} = require("../JavaScript/g_state");
+const g_state = require("../JavaScript/g_state");
 publish_current_post = function (current_user, txt)
 {
     current_user.publish_post(txt);
