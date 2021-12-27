@@ -5,10 +5,6 @@ const message_router = require('./routers/message_router');
 const user_router = require('./routers/user_router');
 const data_base = require('./JavaScript/data_base');
 const app = express();
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const user = require('./models/User');
-const g_state = require("./JavaScript/g_state");
 const admin = require('./models/admin');
 
 app.use(express.urlencoded(
