@@ -26,5 +26,8 @@ router.route('/user')
 router.route('/user/suspend')
     .put(suspend_user);
 
+router.route('/user/message')
+    .post(create_new_user)
+
 
 module.exports = router;

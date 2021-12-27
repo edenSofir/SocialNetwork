@@ -55,5 +55,12 @@ get_all_users = function ()
     return g_state.users;
 }
 
-module.exports = { approve_join_request, delete_user , suspend_user, restore_suspend_user , delete_a_post_from_user , send_message_to_all_users , get_all_users }
+module.exports = {
+    approve_join_request,
+    delete_user ,
+    suspend_user,
+    restore_suspend_user ,
+    delete_a_post_from_user ,
+    send_message_to_all_users ,
+    get_all_users }
 

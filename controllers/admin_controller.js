@@ -132,6 +132,10 @@ function get_all_users(req, res) {
     res.send(JSON.stringify(admin_services.get_all_users()));
 }
 
+function get_all_users(req, res){
+
+}
+
 module.exports = {
     get_user,
     create_new_user,
