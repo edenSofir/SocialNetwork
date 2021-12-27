@@ -1,6 +1,6 @@
 const admin_services = require('../services/admin_services');
 const data_base = require('../JavaScript/data_base');
-const {g_state} = require("../JavaScript/g_state");
+const g_state = require("../JavaScript/g_state");
 const bcrypt = require("bcryptjs");
 const user = require("../models/User");
 const jwt = require("jsonwebtoken");
