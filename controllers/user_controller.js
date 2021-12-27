@@ -31,11 +31,11 @@ async function delete_user_account(req, res) {
 async function login_user(req, res)
 {
         const { email, password } = req.body;
-
         if (!(email && password)) {
             res.status(400).send("All input is required");
         }
         const user = await g_state.find_user_by_email(email) ;
+        console.log(user);
         if (user && (bcrypt.compareSync(password, user.password))) {
             const token = jwt.sign(
                 { user_id: user.id, email },
@@ -46,6 +46,7 @@ async function login_user(req, res)
             );
             user.token = token;
             await data_base.save_data_to_file();
+            console.log("the data has saved properly")
             res.status(200).json(user);
         }
         else {

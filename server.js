@@ -17,5 +17,5 @@ app.use("/post", post_router);
 app.use("/message", message_router);
 app.use("/user", user_router);
 app.listen(2718, () => {
-    data_base.read_data_from_file().then(r => {console.log("starts admin creation"); admin.create_admin().then(r => console.log("admin create") );});
+    data_base.read_data_from_file().then(r => {admin.create_admin().then(r => console.log("admin create") );});
 });

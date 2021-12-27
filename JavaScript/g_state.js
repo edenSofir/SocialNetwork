@@ -6,7 +6,10 @@ let post_id = 1;
 const users = [];
 
 const find_user_by_email = function(email) {
-    return users.find(user => user.email_address === email);
+    console.log(users)
+    const user = users.find(user => user.email_address === email);
+    console.log(user)
+    return user;
 }
 
 function find_user_by_id(id) {

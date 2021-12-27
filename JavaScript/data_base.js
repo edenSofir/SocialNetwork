@@ -12,15 +12,12 @@ async function save_data_to_file() {
         message_id : g_state.message_id
     }
     const json = JSON.stringify(data_to_save);
-
+    await fs.truncate(filePath,0);
     await fs.writeFile(filePath, json);
-
-
 }
 
 async function read_data_from_file() {
-    if(!(((await fs.readFile(filePath))).length === 0))
-    {
+    try {
         const json = fs.readFile(filePath, 'utf8');
         const data_to_save = JSON.parse(await json);
         g_state.users = data_to_save.users;
@@ -28,9 +25,9 @@ async function read_data_from_file() {
         g_state.post_id = data_to_save.post_id;
         g_state.message_id = data_to_save.message_id;
     }
-    else
+    catch (err)
     {
-        console.log("the file is empty");
+        console.log('json is empty');
     }
 }
 
