@@ -45,7 +45,7 @@ async function create_new_user(req, res) {
     }
 }
 
-function delete_current_user(req, res) {
+async function delete_current_user(req, res) {
     const token = req.headers.token;
     const user = g_state.find_user_by_token(token);
     if (!user) {
@@ -59,11 +59,11 @@ function delete_current_user(req, res) {
         return;
     }
     admin_services.delete_user(user);//admin deletes the user
-    data_base.save_data_to_file().then(r => console.log("saved data updated"));
+    await data_base.save_data_to_file();
     res.send(JSON.stringify(g_state.users)); //new array
 }
 
-function restore_user(req, res) {
+async function restore_user(req, res) {
     const token = req.headers.token;
     const user = g_state.find_user_by_token(token);
     console.log("before restore: ", user);
@@ -80,11 +80,11 @@ function restore_user(req, res) {
 
     admin_services.restore_suspend_user(user);
     console.log("after restore: ", user);
-    data_base.save_data_to_file().then(r => console.log("saved data updated"));
+    await data_base.save_data_to_file().then(r => console.log("saved data updated"));
     res.send(JSON.stringify(g_state.users)); //new array
 }
 
-function suspend_user(req, res) {
+async function suspend_user(req, res) {
     const token = req.headers.token;
     const user = g_state.find_user_by_token(token);
     if (!user) {
@@ -98,11 +98,11 @@ function suspend_user(req, res) {
         return;
     }
     admin_services.suspend_user(user);
-    data_base.save_data_to_file().then(r => "saved data updated");
+    await data_base.save_data_to_file().then(r => "saved data updated");
     res.send(JSON.stringify(g_state.users)); //new array
 }
 
-function approve_user(req, res) {
+async function approve_user(req, res) {
     const id = parseInt(req.headers.id);
     const user = g_state.find_user_by_id(id);
     if (!user) {
@@ -116,7 +116,7 @@ function approve_user(req, res) {
         return;
     }
     if(admin_services.approve_join_request(user)) {
-        data_base.save_data_to_file().then(r => console.log("saved data updated"));
+        await data_base.save_data_to_file();
         res.status(status_codes.ACCEPTED);
         res.send(JSON.stringify(g_state.users)); //new array
     }

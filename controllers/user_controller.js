@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const data_base = require("../JavaScript/data_base");
 const status_codes = require("http-status-codes").StatusCodes;
 
-function delete_user_account(req, res) {
+async function delete_user_account(req, res) {
     const current_id = parseInt(req.params.id);
     if (current_id < 0) {
         res.status(status_codes.BAD_REQUEST);
@@ -24,7 +24,7 @@ function delete_user_account(req, res) {
         return;
     }
     user_services.delete_user_account(user);
-
+    await data_base.save_data_to_file()
     res.send(JSON.stringify(g_state.users));
 }
 

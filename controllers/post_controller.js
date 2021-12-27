@@ -1,8 +1,10 @@
 const post_services = require('../services/post_services');
+const data_base = require('../JavaScript/data_base')
 const g_state = require("../JavaScript/g_state");
+const {save_data_to_file} = require("../JavaScript/data_base");
 const status_codes = require("http-status-codes").StatusCodes;
 
-function post_post(req, res) {
+async function post_post(req, res) {
     const {user_id, post_id} = req.params; //should be post id?
     const current_user_id = parseInt(user_id);
     const current_post_id = parseInt(post_id);
@@ -20,6 +22,7 @@ function post_post(req, res) {
     }
 
     post_services.publish_current_post(current_user_id, current_post_id)
+    await data_base.save_data_to_file()
     res.send(JSON.stringify(current_post_id));
 }
 
@@ -36,7 +39,7 @@ function get_all_posts(req, res) {
     res.send(JSON.stringify(current_user_id));
 }
 
-function delete_current_post(req, res) {
+async function delete_current_post(req, res) {
     const current_user_id = parseInt(req.params.user_id);
     const current_post_id = parseInt(req.params.post_id);
 
@@ -51,8 +54,8 @@ function delete_current_post(req, res) {
         res.send("the current user is invalid - out of range");
         return;
     }
-
     post_services.delete_current_post(current_user_id, current_post_id);
+    await data_base.save_data_to_file()
     res.send(JSON.stringify(current_post_id));
 }
 

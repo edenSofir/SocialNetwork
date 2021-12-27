@@ -1,9 +1,10 @@
 const message_services = require('../services/message_services');
+const data_base = require('../JavaScript/data_base');
 const g_state = require("../JavaScript/g_state");
 const status_codes = require("http-status-codes").StatusCodes;
 
 
-function send_a_message(req, res) {
+async function send_a_message(req, res) {
     const {current, recipient, text} = req.params;
     const current_id = parseInt(current);
     const recipient_id = parseInt(recipient);
@@ -33,6 +34,7 @@ function send_a_message(req, res) {
     if (!message_services.send_a_message(current_id, user, text)) {
         res.status(status_codes.FORBIDDEN);
     }
+    await data_base.save_data_to_file();
     res.send(JSON.stringify(g_state.users)); //new array
 }
 
