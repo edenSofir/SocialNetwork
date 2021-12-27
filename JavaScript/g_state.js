@@ -21,6 +21,23 @@ g_state.find_user_by_email = function(email){
     return g_state.users.find(user => user.email_address === email);
 
 }
+
+g_state.createAdmin = function ()
+{
+    if(!g_state.users.find(user => user.name === 'admin'))
+    {
+        const admin = new users.User("Admin",0,"admin@admin.com","admin");
+        admin.token = 0 ;
+        admin.status = users.Status.active
+        g_state.users.push(admin);
+        console.log(users.User);
+    }
+    else
+    {
+        console.log("admin already exist");
+    }
+}
+
 module.exports = { g_state  }
 
 
