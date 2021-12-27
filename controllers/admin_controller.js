@@ -103,7 +103,7 @@ function suspend_user(req, res) {
 }
 
 function approve_user(req, res) {
-    const id = req.headers.id;
+    const id = parseInt(req.headers.id);
     const user = g_state.find_user_by_id(id);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
