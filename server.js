@@ -18,11 +18,9 @@ app.use("/post", post_router);
 app.use("/message", message_router);
 
 app.listen(2718, () => {
+    data_base.read_data_from_file();
 
-    data_base.read_data_from_file()
-    console.log(g_state.users);
-    if(!(g_state.users.find(user => user.id === 0)))
-        g_state.users.push(g_state.admin);
+    g_state.createAdmin();
 });
 
 app.post("/login", async (req, res) => {
