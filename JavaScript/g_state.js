@@ -1,13 +1,8 @@
 const {StatusCodes: status_codes} = require("http-status-codes");
-const data_base = require("./data_base");
-const user = require("../models/User");
 
-const message_id = 1;
-const user_id = 0;
-const post_id = 1;
-const admin = new user.User("Admin",0,"admin@admin.com","admin");
-admin.token = 0;
-
+let message_id = 1;
+let user_id = 0;
+let post_id = 1;
 const users = [];
 
 const find_user_by_email = function(email) {
@@ -21,31 +16,15 @@ function find_user_by_id(id) {
 
 function find_user_by_token(token) {
 
-    return g_state.users.find(user => user.token === token);
-
-}
-
-const create_admin = function () {
-    if(!users.find(user => user.name === 'admin')) {
-        const admin =
-            new users.User("Admin",0,"admin@admin.com","admin");
-        admin.token = 0 ;
-        admin.status = users.Status.active
-        users.push(admin);
-        console.log(users.User);
-    } else {
-        console.log("admin already exist");
-    }
+    return users.find(user => user.token === token);
 }
 
 module.exports = {
-    admin,
     find_user_by_email,
     users,
     message_id,
     user_id,
     post_id,
-    create_admin,
     find_user_by_id,
     find_user_by_token
 }
