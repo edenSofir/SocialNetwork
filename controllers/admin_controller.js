@@ -4,6 +4,7 @@ const g_state = require("../JavaScript/g_state");
 const bcrypt = require("bcryptjs");
 const user = require("../models/User");
 const jwt = require("jsonwebtoken");
+const Console = require("console");
 const status_codes = require("http-status-codes").StatusCodes;
 
 
@@ -74,7 +75,7 @@ async function restore_user(req, res) {
     }
     if (user.id === 0) {
         res.status(status_codes.FORBIDDEN);
-        res.send("the current id is the admin user - allways active");
+        res.send("the current id is the admin user - always active");
         return;
     }
 
@@ -130,10 +131,21 @@ async function approve_user(req, res) {
 function get_all_users(req, res) {
 
     res.send(JSON.stringify(admin_services.get_all_users()));
+    res.status(status_codes.ACCEPTED)
 }
 
-function get_all_users(req, res){
+function send_message_to_all(req, res){
 
+    const message = req.body.message;
+    if(!message){
+        res.send("Invalid message");
+        res.status(status_codes.BAD_REQUEST);
+        return;
+    }
+
+    admin_services.send_message_to_all_users(message);
+    res.send(JSON.stringify(g_state.users));
+    res.status(status_codes.ACCEPTED);
 }
 
 module.exports = {
@@ -143,7 +155,8 @@ module.exports = {
     restore_user,
     suspend_user,
     approve_user,
-    get_all_users
+    get_all_users,
+    send_message_to_all
 }
 
 
