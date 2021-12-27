@@ -19,7 +19,7 @@ async function save_data_to_file() {
 }
 
 async function read_data_from_file() {
-    if((!(await fs.readFile(filePath))).length === 0)
+    if(!(((await fs.readFile(filePath))).length === 0))
     {
         const json = fs.readFile(filePath, 'utf8');
         const data_to_save = JSON.parse(await json);
