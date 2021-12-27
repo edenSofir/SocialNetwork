@@ -4,10 +4,7 @@ const g_state = require("../JavaScript/g_state");
 const bcrypt = require("bcryptjs");
 const user = require("../models/User");
 const jwt = require("jsonwebtoken");
-const Console = require("console");
 const status_codes = require("http-status-codes").StatusCodes;
-
-
 
 function get_user(req, res) {
     const token = req.headers.token;
@@ -134,7 +131,7 @@ function get_all_users(req, res) {
     res.status(status_codes.ACCEPTED)
 }
 
-function send_message_to_all(req, res){
+function send_message_to_all(req, res) {
 
     const message = req.body.message;
     if(!message){
