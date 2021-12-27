@@ -58,7 +58,6 @@ async function logoff_user(req, res)
     try {
         const current_token = req.header.token;
         console.log(current_token)
-        console.log(g_state.users)
         const current_user_to_logoff = g_state.find_user_by_token(current_token);
         if(current_user_to_logoff == null)
         {
@@ -66,10 +65,10 @@ async function logoff_user(req, res)
         }
         else {
             current_user_to_logoff.token = null;
-            console.log("logoff preformed")
-            res.status(200).json(current_user_to_logoff)
+            console.log("logoff preformed");
+            await data_base.save_data_to_file();
+            res.status(200).json(current_user_to_logoff);
         }
-        //anything else?
     } catch (err) {
         console.log(err);
     }
