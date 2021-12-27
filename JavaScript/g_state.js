@@ -21,6 +21,7 @@ g_state.find_user_by_email = function(email){
     return g_state.users.find(user => user.email_address === email);
 
 }
+module.exports = { g_state }
 
 g_state.createAdmin = function ()
 {

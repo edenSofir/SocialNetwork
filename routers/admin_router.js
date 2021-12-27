@@ -23,7 +23,7 @@ router.route('/user')
     .post(create_new_user)
     .get(get_all_users);
 
-router.route('/user/suspend/(:id)')
+router.route('/user/suspend')
     .put(suspend_user);
 
 

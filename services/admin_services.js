@@ -1,4 +1,5 @@
 const g_state = require("../JavaScript/g_state");
+const users = require("../models/User");
 
 approve_join_request = function (current_user) {
 
@@ -6,19 +7,18 @@ approve_join_request = function (current_user) {
         if (user.email_address === current_user.email_address)
             return false;
     });
-    current_user.status = g_state.g_state.Status.active;
+    current_user.status = users.Status.active;
     g_state.g_state.users.push(current_user);
     return true;
 }
 
 suspend_user = function (current_user) {
 
-    current_user.status = g_state.g_state.Status.suspended;
+    current_user.status = users.Status.suspended;
 }
 
 delete_user = function (current_user) {
 
-    current_user.status = g_state.g_state.Status.deleted;
     g_state.g_state.users.forEach((user, index) => {
         if (user.id === current_user.id) {
             g_state.g_state.users.splice(index, 1);
@@ -28,7 +28,7 @@ delete_user = function (current_user) {
 
 restore_suspend_user = function (current_user) {
 
-    current_user.status = g_state.g_state.Status.active;
+    current_user.status = users.Status.active;
 }
 
 delete_a_post_from_user = function (current_user, post_id) {

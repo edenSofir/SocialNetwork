@@ -59,14 +59,14 @@ async function create_new_user(req, res) {
 }
 
 function delete_current_user(req, res) {
-    const token = parseInt(req.headers.token);
+    const token = req.headers.token;
     const user = find_user_by_token(token);
     if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    if (user.id === 1) {
+    if (user.id === 0) {
         res.status(g_state.status_codes.FORBIDDEN);
         res.send("the current id is the admin user - he can not be deleted");
         return;
@@ -77,33 +77,35 @@ function delete_current_user(req, res) {
 }
 
 function restore_user(req, res) {
-    const token = parseInt(req.headers.token);
+    const token = req.headers.token;
     const user = find_user_by_token(token);
+    console.log("before restore: ", user);
     if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    if (user.id === 1) {
+    if (user.id === 0) {
         res.status(g_state.status_codes.FORBIDDEN);
         res.send("the current id is the admin user - allways active");
         return;
     }
 
     admin_services.restore_suspend_user(user);
+    console.log("after restore: ", user);
     data_base.save_data_to_file().then(r => console.log("saved data updated"));
     res.send(JSON.stringify(g_state.users)); //new array
 }
 
 function suspend_user(req, res) {
-    const token = parseInt(req.headers.token);
+    const token = req.headers.token;
     const user = find_user_by_token(token);
     if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
         return;
     }
-    if (user.id === 1) {
+    if (user.id === 0) {
         res.status(g_state.status_codes.FORBIDDEN);
         res.send("the current id is the admin user - already active");
         return;
@@ -114,7 +116,7 @@ function suspend_user(req, res) {
 }
 
 function approve_user(req, res) {
-    const token = parseInt(req.headers.token);
+    const token = req.headers.token;
     const user = find_user_by_token(token);
     if (!user) {
         res.status(g_state.status_codes.NOT_FOUND);
