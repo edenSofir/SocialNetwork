@@ -4,7 +4,6 @@ const path = require('path');
 const filePath = path.join(__dirname, '/SocialNetworkData.txt');
 
 
-
 async function save_data_to_file() {
 
     const data_to_save = { users: g_state.users,

@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const user = require('./models/User');
 const g_state = require("./JavaScript/g_state");
+const admin = require('./models/admin');
+
 app.use(express.urlencoded(
    {
       extended: true
@@ -18,7 +20,7 @@ app.use("/post", post_router);
 app.use("/message", message_router);
 
 app.listen(2718, () => {
-    data_base.read_data_from_file().then(r => {console.log("starts admin creation"); g_state.create_admin();});
+    data_base.read_data_from_file().then(r => {console.log("starts admin creation"); admin.create_admin().then(r => console.log("admin create") );});
 });
 
 app.post("/login", async (req, res) => {
