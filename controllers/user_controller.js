@@ -2,6 +2,7 @@ const user_services = require('../services/user_service');
 const g_state = require("../JavaScript/g_state");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const data_base = require("../JavaScript/data_base");
 const status_codes = require("http-status-codes").StatusCodes;
 
 function delete_user_account(req, res) {
@@ -29,16 +30,13 @@ function delete_user_account(req, res) {
 
 async function login_user(req, res)
 {
-    try {
         const { email, password } = req.body;
 
         if (!(email && password)) {
             res.status(400).send("All input is required");
         }
-
         const user = await g_state.find_user_by_email(email) ;
-
-        if (user && (await bcrypt.compare(password, user.password))) {
+        if (user && (bcrypt.compareSync(password, user.password))) {
             const token = jwt.sign(
                 { user_id: user.id, email },
                 "kjnkjnhkjnljn35213541dgvrf351",
@@ -47,24 +45,30 @@ async function login_user(req, res)
                 }
             );
             user.token = token;
+            await data_base.save_data_to_file();
             res.status(200).json(user);
         }
-        res.status(400).send("Invalid Credentials");
-    } catch (err) {
-        console.log(err);
-    }
+        else {
+            res.status(400).send("Invalid Credentials");
+        }
 }
 
 async function logoff_user(req, res)
 {
     try {
         const current_token = req.header.token;
+        console.log(current_token)
+        console.log(g_state.users)
         const current_user_to_logoff = g_state.find_user_by_token(current_token);
         if(current_user_to_logoff == null)
         {
             res.status(400).send("the token is invalid , no user matches to this token");
         }
-        current_user_to_logoff.token = null ;
+        else {
+            current_user_to_logoff.token = null;
+            console.log("logoff preformed")
+            res.status(200).json(current_user_to_logoff)
+        }
         //anything else?
     } catch (err) {
         console.log(err);
