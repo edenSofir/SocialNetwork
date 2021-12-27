@@ -8,7 +8,6 @@ approve_join_request = function (current_user) {
             return false;
     });
     current_user.status = users.Status.active;
-    g_state.users.push(current_user);
     return true;
 }
 
