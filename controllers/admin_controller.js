@@ -35,16 +35,6 @@ async function create_new_user(req, res) {
         const encrypted_password = await bcrypt.hash(password, 10);
         const id = g_state.user_id += 1;
         const new_user = await new user.User(full_name, id, email.toLowerCase(), encrypted_password);
-        const token = jwt.sign(
-            {
-                user_id: new_user.id,
-                email: email,
-            },
-            "kjnkjnhkjnljn35213541dgvrf351",
-            {
-                expiresIn: "10min",
-            });
-        new_user.token = token;
         g_state.users.push(new_user);
         data_base.save_data_to_file().then(r => console.log("saved data updated"));
         res.status(201).send(JSON.stringify(new_user));
@@ -113,8 +103,8 @@ function suspend_user(req, res) {
 }
 
 function approve_user(req, res) {
-    const token = req.headers.token;
-    const user = g_state.find_user_by_token(token);
+    const id = req.headers.id;
+    const user = g_state.find_user_by_id(id);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
@@ -125,9 +115,16 @@ function approve_user(req, res) {
         res.send("the current id is the admin user - already active");
         return;
     }
-    admin_services.approve_join_request(user);
-    data_base.save_data_to_file().then(r => console.log("saved data updated"));
-    res.send(JSON.stringify(g_state.users)); //new array
+    if(admin_services.approve_join_request(user)) {
+        data_base.save_data_to_file().then(r => console.log("saved data updated"));
+        res.status(status_codes.ACCEPTED);
+        res.send(JSON.stringify(g_state.users)); //new array
+    }
+    else {
+        res.send("invalid email - email already exists. please login");
+        res.status(status_codes.FORBIDDEN);
+    }
+
 }
 
 function get_all_users(req, res) {
