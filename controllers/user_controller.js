@@ -38,17 +38,17 @@ async function login_user(req, res)
         const user = await g_state.find_user_by_email(email) ;
         console.log(user);
         if (user && (bcrypt.compareSync(password, user.password))) {
-            jwt.sign(
-                { user_id: user.id, email },
-                "kjnkjnhkjnljn35213541dgvrf351",
-                {
-                    expiresIn: "10min",
-                }
-            );
+           const token  = jwt.sign(
+                        { user_id: user.id, email },
+                        "kjnkjnhkjnljn35213541dgvrf351",
+                        {
+                            expiresIn: "10min",
+                        }
+                    );
             await data_base.save_data_to_file();
             user.is_logon = true;
             console.log("the data has saved properly")
-            res.status(200).json(user);
+            res.status(200).json(token);
         }
         else {
             res.status(400).send("Invalid Credentials");
