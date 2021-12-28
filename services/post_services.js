@@ -1,4 +1,4 @@
-const g_state = require("../JavaScript/g_state");
+const  data_base = require('../JavaScript/data_base');
 publish_current_post = function (current_user, txt)
 {
     current_user.publish_post(txt);
@@ -7,7 +7,7 @@ publish_current_post = function (current_user, txt)
 get_all_posts_from_users = function ()
 {
     const all_posts =[]
-    g_state.users.forEach((user,index )=>
+    data_base.users.forEach((user,index )=>
         user.posts.forEach((post,index) => all_posts.push(post) ));
 }
 

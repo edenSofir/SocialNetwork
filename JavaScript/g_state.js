@@ -1,33 +1,25 @@
-const {StatusCodes: status_codes} = require("http-status-codes");
+const data_base = require('../JavaScript/data_base')
 
-let message_id = 1;
-let user_id = 0;
-let post_id = 1;
-const users = [];
-
-const find_user_by_email = function(email) {
-    console.log(users)
-    const user = users.find(user => user.email_address === email);
-    console.log(user)
+function find_user_by_email(email) {
+    console.log(data_base.users)
+    const user = data_base.users.find(user => user.email_address === email);
+    console.log("current user: ",user)
     return user;
 }
 
 function find_user_by_id(id) {
 
-    return users.find(user => user.id === id);
+    return data_base.users.find(user => user.id === id);
 }
 
 function find_user_by_token(token) {
-
-    return users.find(user => user.token === token);
+    console.log("input:",token)
+    console.log("all users for now to search in by token",data_base.users)
+    return data_base.users.find(user => user.token === token);
 }
 
 module.exports = {
     find_user_by_email,
-    users,
-    message_id,
-    user_id,
-    post_id,
     find_user_by_id,
     find_user_by_token
 }

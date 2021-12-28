@@ -36,7 +36,7 @@ async function send_a_message(req, res) {
         res.status(status_codes.FORBIDDEN);
     }
     await data_base.save_data_to_file();
-    res.send(JSON.stringify(g_state.users)); //new array
+    res.send(JSON.stringify(data_base.users)); //new array
 }
 
 module.exports = {

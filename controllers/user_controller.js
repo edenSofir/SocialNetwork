@@ -3,6 +3,7 @@ const g_state = require("../JavaScript/g_state");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const data_base = require("../JavaScript/data_base");
+const {Status} = require("../models/User");
 const status_codes = require("http-status-codes").StatusCodes;
 
 async function delete_user_account(req, res) {
@@ -25,7 +26,7 @@ async function delete_user_account(req, res) {
     }
     user_services.delete_user_account(user);
     await data_base.save_data_to_file()
-    res.send(JSON.stringify(g_state.users));
+    res.send(JSON.stringify(data_base.users));
 }
 
 async function login_user(req, res)
@@ -37,15 +38,15 @@ async function login_user(req, res)
         const user = await g_state.find_user_by_email(email) ;
         console.log(user);
         if (user && (bcrypt.compareSync(password, user.password))) {
-            const token = jwt.sign(
+            jwt.sign(
                 { user_id: user.id, email },
                 "kjnkjnhkjnljn35213541dgvrf351",
                 {
                     expiresIn: "10min",
                 }
             );
-            user.token = token;
             await data_base.save_data_to_file();
+            user.is_logon = true;
             console.log("the data has saved properly")
             res.status(200).json(user);
         }
@@ -56,23 +57,24 @@ async function login_user(req, res)
 
 async function logoff_user(req, res)
 {
-    try {
-        const current_token = req.header.token;
-        console.log(current_token)
-        const current_user_to_logoff = g_state.find_user_by_token(current_token);
-        if(current_user_to_logoff == null)
+        const auth_header = req.headers["authorization"];
+        const current_token = auth_header && auth_header.split(" ")[1];
+
+        if(current_token == null)
         {
-            res.status(400).send("the token is invalid , no user matches to this token");
+            res.status(400).send("the token is invalid");
         }
-        else {
-            current_user_to_logoff.token = null;
-            console.log("logoff preformed");
-            await data_base.save_data_to_file();
-            res.status(200).json(current_user_to_logoff);
-        }
-    } catch (err) {
-        console.log(err);
-    }
+        jwt.verify(current_token,data_base.secret_jwt, async (err, user_payload) => {
+            if (err) {
+                res.status(400).send("token is invalid, please try again later");
+            } else {
+                const user = g_state.find_user_by_id(user_payload.user_id);
+                user.is_logon = false;
+                console.log("logoff preformed");
+                await data_base.save_data_to_file();
+                res.status(200).json(user);
+            }
+        });
 }
 module.exports = {
     delete_user_account,

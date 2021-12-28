@@ -1,11 +1,11 @@
-const g_state = require("../JavaScript/g_state");
 const users = require("../models/User");
 const {admin: admin} = require("../models/admin").admin;
 const messages = require('../models/Messages');
+const data_base = require('../JavaScript/data_base');
 
 approve_join_request = function (current_user) {
 
-    g_state.users.forEach((user, index) => {
+    data_base.users.forEach((user, index) => {
         if (user.email_address === current_user.email_address)
             return false;
     });
@@ -20,9 +20,9 @@ suspend_user = function (current_user) {
 
 delete_user = function (current_user) {
 
-    g_state.users.forEach((user, index) => {
+    data_base.users.forEach((user, index) => {
         if (user.id === current_user.id) {
-            g_state.users.splice(index, 1);
+            data_base.users.splice(index, 1);
         }
     });
 }
@@ -43,17 +43,17 @@ delete_a_post_from_user = function (current_user, post_id) {
 
 send_message_to_all_users = function (message_to_send) {
 
-    const message = new messages.Message(message_to_send, g_state.message_id, Date.now(), admin);
-    g_state.message_id += 1;
+    const message = new messages.Message(message_to_send, data_base.message_id, Date.now(), admin);
+    data_base.message_id += 1;
 
-    g_state.users.forEach((user) => {
+    data_base.users.forEach((user) => {
         user.messages.push(message);
     });
 }
 
 get_all_users = function () {
-    console.log("sowed: ", g_state.users);
-    return g_state.users;
+    console.log("sowed: ", data_base.users);
+    return data_base.users;
 }
 
 module.exports = {
