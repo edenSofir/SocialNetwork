@@ -39,12 +39,10 @@ async function login_user(req, res)
         console.log(user);
         if (user && (bcrypt.compareSync(password, user.password))) {
            const token  = jwt.sign(
-                        { user_id: user.id, email },
+                { user_id: user.id, email },
                         data_base.secret_jwt,
-                        {
-                            expiresIn: "10min",
-                        }
-                    );
+                { expiresIn: "10min"}
+           );
             await data_base.save_data_to_file();
             user.is_logon = true;
             console.log("the data has saved properly")
