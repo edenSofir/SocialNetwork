@@ -7,14 +7,23 @@ const jwt = require("jsonwebtoken");
 const status_codes = require("http-status-codes").StatusCodes;
 
 function get_user(req, res) {
-    const token = req.headers.token;
-    const current_user = g_state.find_user_by_token(token);
-    if (!current_user) {
-        res.status(status_codes.BAD_REQUEST);
-        res.send("the current token isn't valid");
-        return;
+    const auth_header = req.headers["authorization"];
+    const current_token = auth_header && auth_header.split(" ")[1];
+    if(current_token == null)
+    {
+        res.status(400).send("the token is invalid");
     }
-    res.send(JSON.stringify(current_user));
+    jwt.verify(current_token,data_base.secret_jwt, async (err, user_payload) => {
+        if(err)
+        {
+            res.status(400).send("the token is invalid");
+        }
+        else
+        {
+            const current_user = g_state.find_user_by_id(user_payload.user_id);
+            res.send(JSON.stringify(current_user));
+        }
+    })
 }
 
 async function create_new_user(req, res) {
