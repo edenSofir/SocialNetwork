@@ -7,23 +7,10 @@ const jwt = require("jsonwebtoken");
 const status_codes = require("http-status-codes").StatusCodes;
 
 function get_user(req, res) {
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
-    if(current_token == null)
-    {
-        res.status(400).send("the token is invalid");
-    }
-    jwt.verify(current_token,data_base.secret_jwt, async (err, user_payload) => {
-        if(err)
-        {
-            res.status(400).send("the token is invalid");
-        }
-        else
-        {
-            const current_user = g_state.find_user_by_id(user_payload.user_id);
-            res.send(JSON.stringify(current_user));
-        }
-    })
+    const id = req.body.id;
+    const current_user_id = parseInt(id); //should we check if not an int?
+    const user = g_state.find_user_by_id(current_user_id);
+    res.send(JSON.stringify(user));
 }
 
 async function create_new_user(req, res) {
@@ -53,7 +40,7 @@ async function create_new_user(req, res) {
 }
 
 async function delete_current_user(req, res) {
-    const id = req.body;
+    const id = req.body.id;
     const current_user_id = parseInt(id); //should we check if not an int?
     const user = g_state.find_user_by_id(current_user_id);
     if (!user) {
@@ -72,7 +59,7 @@ async function delete_current_user(req, res) {
 }
 
 async function restore_user(req, res) {
-    const id = req.body;
+    const id = req.body.id;
     const current_user_id = parseInt(id); //should we check if not an int?
     const user = g_state.find_user_by_id(current_user_id);
     if (!user) {
@@ -91,7 +78,7 @@ async function restore_user(req, res) {
 }
 
 async function suspend_user(req, res) {
-    const id = req.body;
+    const id = req.body.id;
     const current_user_id = parseInt(id); //should we check if not an int?
     const user = g_state.find_user_by_id(current_user_id);
     if (!user) {
@@ -110,7 +97,7 @@ async function suspend_user(req, res) {
 }
 
 async function approve_user(req, res) {
-    const id = req.body;
+    const id = req.body.id;
     const current_user_id = parseInt(id); //should we check if not an int?
     const user = g_state.find_user_by_id(current_user_id);
     if (!user) {
@@ -145,7 +132,6 @@ function send_message_to_all(req, res) {
         res.status(status_codes.BAD_REQUEST);
         return;
     }
-
     admin_services.send_message_to_all_users(message);
     res.send(JSON.stringify(data_base.users));
     res.status(status_codes.ACCEPTED);

@@ -2,6 +2,7 @@ const users = require("../models/User");
 const {admin: admin} = require("../models/admin").admin;
 const messages = require('../models/Messages');
 const data_base = require('../JavaScript/data_base');
+const g_state = require("../JavaScript/g_state");
 
 approve_join_request = function (current_user) {
     current_user.status = users.Status.active;
@@ -13,12 +14,9 @@ suspend_user = function (current_user) {
 }
 
 delete_user = function (current_user) {
+    const index = data_base.users.indexOf(current_user);
+    data_base.users.splice(index, 1);
 
-    data_base.users.forEach((user, index) => {
-        if (user.id === current_user.id) {
-            data_base.users.splice(index, 1);
-        }
-    });
 }
 
 restore_suspend_user = function (current_user) {
@@ -39,9 +37,10 @@ send_message_to_all_users = function (message_to_send) {
 
     const message = new messages.Message(message_to_send, data_base.message_id, Date.now(), admin);
     data_base.message_id += 1;
-
     data_base.users.forEach((user) => {
-        user.messages.push(message);
+        if(user.id !== 0) {
+            user.messages.push(message);
+        }
     });
 }
 
