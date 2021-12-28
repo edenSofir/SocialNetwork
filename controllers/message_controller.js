@@ -8,6 +8,7 @@ async function send_a_message(req, res) {
     const recipient_id = parseInt(recipient);
     const sender_token = req.headers.token;
     const sender = g_state.find_user_by_token(sender_token);
+    console.log("sender: ", sender);
     if (!sender) {
         res.status(status_codes.NOT_FOUND);
         res.send("There is no such user in our users array");
