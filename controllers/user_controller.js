@@ -36,7 +36,10 @@ async function login_user(req, res)
             res.status(400).send("All input is required");
         }
         const user = await g_state.find_user_by_email(email) ;
-        console.log(user);
+        if(user.is_logon === true)
+        {
+            res.status(400).send("you are already login!")
+        }
         if (user && (bcrypt.compareSync(password, user.password))) {
            const token  = jwt.sign(
                 { user_id: user.id, email },
@@ -67,10 +70,17 @@ async function logoff_user(req, res)
                 res.status(400).send("token is invalid, please try again later");
             } else {
                 const user = g_state.find_user_by_id(user_payload.user_id);
-                user.is_logon = false;
-                console.log("logoff preformed");
-                await data_base.save_data_to_file();
-                res.status(200).json(user);
+                if(user.is_logon === true)
+                {
+                    user.is_logon = false;
+                    console.log("logoff preformed");
+                    await data_base.save_data_to_file();
+                    res.status(200).json(user);
+                }
+                else
+                {
+                    res.status(400).send("you are already logout!");
+                }
             }
         });
 }
