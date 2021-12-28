@@ -7,26 +7,41 @@ const {Status} = require("../models/User");
 const status_codes = require("http-status-codes").StatusCodes;
 
 async function delete_user_account(req, res) {
-    const current_id = parseInt(req.params.id);
-    if (current_id < 0) {
-        res.status(status_codes.BAD_REQUEST);
-        res.send("the current id is out of range")
-        return;
+    const auth_header = req.headers["authorization"];
+    const current_token = auth_header && auth_header.split(" ")[1];
+    if(current_token == null)
+    {
+        res.status(400).send("the token is invalid");
     }
-    if (current_id === 0) {
-        res.status(status_codes.FORBIDDEN);
-        res.send("the current id is the admin user - he can not be deleted");
-        return;
-    }
-    const user = g_state.find_user_by_id(current_id);
-    if (user) {
-        res.status(status_codes.NOT_FOUND);
-        res.send("there is no such user in our users array");
-        return;
-    }
-    user_services.delete_user_account(user);
-    await data_base.save_data_to_file()
-    res.send(JSON.stringify(data_base.users));
+    jwt.verify(current_token,data_base.secret_jwt, async (err, user_payload) => {
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            if(user_payload.user_id === 0)
+            {
+                res.status(status_codes.FORBIDDEN);
+                res.send("the current id is the admin user - he can not be deleted");
+            }
+            else
+            {
+                const user = g_state.find_user_by_id(user_payload.user_id);
+                if(user.is_logon === true)
+                {
+                    user_services.delete_user_account(user);
+                    await data_base.save_data_to_file()
+                    res.send(JSON.stringify(data_base.users));
+                }
+                else
+                {
+                    res.status(status_codes.FORBIDDEN);
+                    res.send("you are logoff - please preform login first!");
+                }
+            }
+        }
+    })
 }
 
 async function login_user(req, res)
