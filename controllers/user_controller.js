@@ -40,7 +40,7 @@ async function login_user(req, res)
         if (user && (bcrypt.compareSync(password, user.password))) {
            const token  = jwt.sign(
                         { user_id: user.id, email },
-                        "kjnkjnhkjnljn35213541dgvrf351",
+                        data_base.secret_jwt,
                         {
                             expiresIn: "10min",
                         }
