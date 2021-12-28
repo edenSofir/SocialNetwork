@@ -1,5 +1,6 @@
 const data_base = require('../JavaScript/data_base');
 const messages = require('../models/Messages');
+const posts = require('../models/Posts');
 
 class User{
 
@@ -18,7 +19,7 @@ class User{
     publish_post(text){
 
         if(this.status === Status.active && this.is_logon === true) {
-            const post = new Post(this, text, data_base.post_id);
+            const post = new posts.Post(text, data_base.post_id);
             data_base.post_id += 1;
             this.posts.push(post);
             return true;
