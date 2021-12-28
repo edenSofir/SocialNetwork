@@ -1,5 +1,6 @@
 const data_base = require('../JavaScript/data_base');
 const messages = require('../models/Messages');
+const posts = require('../models/Posts');
 
 class User{
 
@@ -18,7 +19,7 @@ class User{
     publish_post(text){
 
         if(this.status === Status.active && this.is_logon === true) {
-            const post = new Post(this, text, data_base.post_id);
+            const post = new posts.Post(text, data_base.post_id);
             data_base.post_id += 1;
             this.posts.push(post);
             return true;
@@ -26,15 +27,17 @@ class User{
         return false;
     }
 
-    delete_post(post) {
+    delete_post(post_id) {
 
-        if (this.status === Status.active && this.is_logon === true) {
-            const index = get_post_index(this, post);
-            this.posts.slice(index, 1);
+        if ((this.status === Status.active) && (this.is_logon === true)) {
+
+            const post = this.posts.find( post => post.id === post_id);
+            if(!post) return false;
+            const index = this.posts.indexOf(post);
+            this.posts.splice(index, 1);
+            console.log("posts: ", this.posts);
             return true;
         }
-
-        return false;
     }
 
     send_message(recipient, text) {

@@ -10,11 +10,10 @@ const {
 
 const post_router = express.Router();
 
-post_router.route('/user/(:id)')
+post_router.route('/user')
     .post(post_post)
-    .put(delete_current_post)
-
-post_router.route('/users')
+    .delete(delete_current_post)
     .get(get_all_posts);
+
 
 module.exports = post_router;
