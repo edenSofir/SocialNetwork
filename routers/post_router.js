@@ -12,7 +12,7 @@ const post_router = express.Router();
 
 post_router.route('/user')
     .post(post_post)
-    .put(delete_current_post)
+    .delete(delete_current_post)
     .get(get_all_posts);
 
 

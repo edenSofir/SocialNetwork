@@ -62,24 +62,44 @@ function get_all_posts(req, res) {
 }
 
 async function delete_current_post(req, res) {
-    const current_user_id = parseInt(req.params.user_id);
-    const current_post_id = parseInt(req.params.post_id);
+    const post_id = parseInt(req.body.id);
 
-    if (current_post_id < 1) {
+    if (post_id < 1 || post_id > data_base.post_id) {
         res.status(status_codes.BAD_REQUEST);
         res.send("the current post is invalid - out of range");
         return;
     }
 
-    if (current_user_id < 0) {
-        res.status(status_codes.BAD_REQUEST);
-        res.send("the current user is invalid - out of range");
-        return;
+    const auth_header = req.headers["authorization"];
+    const current_token = auth_header && auth_header.split(" ")[1];
+    if (!current_token) {
+        res.status(400).send("the token is invalid");
     }
-    post_services.delete_current_post(current_user_id, current_post_id);
-    await data_base.save_data_to_file()
-    res.send(JSON.stringify(current_post_id));
+    jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
+        if (err) {
+            res.status(400).send("token is invalid, please try again later");
+        } else {//token is OK!
+            const user = g_state.find_user_by_id(user_payload.user_id);
+            if (user.is_logon) {
+                const post = post_services.delete_current_post(user, post_id);
+                if (!post) {
+                    res.status(status_codes.BAD_REQUEST);
+                    res.send("You don't have post with this id");
+                    return;
+                }
+                await data_base.save_data_to_file()
+                res.status(status_codes.ACCEPTED).send(JSON.stringify(data_base.users));
+            } else {
+                res.status(status_codes.FORBIDDEN);
+                res.send("You need to login first :)");
+            }
+        }
+    });
+
 }
+
+
+
 
 module.exports = {
     post_post,
