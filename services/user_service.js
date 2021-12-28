@@ -6,9 +6,4 @@ const delete_user_account = function (sender_id)
     return user.delete();
 }
 
-//const login = function()
-
-
-
-
 module.exports = { delete_user_account }

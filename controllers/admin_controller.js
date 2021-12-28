@@ -19,21 +19,22 @@ function get_user(req, res) {
 
 async function create_new_user(req, res) {
     try {
+        console.log("at start of create_new_user",data_base.users, "end")
         const {full_name, email, password} = req.body;
         if (!(password && email && full_name)) {
             res.status(400).send("all input required. please try again");
             return;
         }
-        const is_user_exist = await g_state.find_user_by_email(email);
+        const is_user_exist = g_state.find_user_by_email(email);
         if (is_user_exist) {
             res.status(409).send("user is already exist. please preform login");
             return;
         }
 
         const encrypted_password = await bcrypt.hash(password, 10);
-        const id = g_state.user_id += 1;
+        const id = data_base.user_id += 1;
         const new_user = await new user.User(full_name, id, email.toLowerCase(), encrypted_password);
-        g_state.users.push(new_user);
+        data_base.users.push(new_user);
         data_base.save_data_to_file().then(r => console.log("saved data updated"));
         res.status(201).send(JSON.stringify(new_user));
     }
@@ -58,7 +59,7 @@ async function delete_current_user(req, res) {
     }
     admin_services.delete_user(user);//admin deletes the user
     await data_base.save_data_to_file();
-    res.send(JSON.stringify(g_state.users)); //new array
+    res.send(JSON.stringify(data_base.users)); //new array
 }
 
 async function restore_user(req, res) {
@@ -79,7 +80,7 @@ async function restore_user(req, res) {
     admin_services.restore_suspend_user(user);
     console.log("after restore: ", user);
     await data_base.save_data_to_file().then(r => console.log("saved data updated"));
-    res.send(JSON.stringify(g_state.users)); //new array
+    res.send(JSON.stringify(data_base.users)); //new array
 }
 
 async function suspend_user(req, res) {
@@ -97,7 +98,7 @@ async function suspend_user(req, res) {
     }
     admin_services.suspend_user(user);
     await data_base.save_data_to_file().then(r => "saved data updated");
-    res.send(JSON.stringify(g_state.users)); //new array
+    res.send(JSON.stringify(data_base.users)); //new array
 }
 
 async function approve_user(req, res) {
@@ -116,7 +117,7 @@ async function approve_user(req, res) {
     if(admin_services.approve_join_request(user)) {
         await data_base.save_data_to_file();
         res.status(status_codes.ACCEPTED);
-        res.send(JSON.stringify(g_state.users)); //new array
+        res.send(JSON.stringify(data_base.users)); //new array
     }
     else {
         res.send("invalid email - email already exists. please login");
@@ -141,7 +142,7 @@ function send_message_to_all(req, res) {
     }
 
     admin_services.send_message_to_all_users(message);
-    res.send(JSON.stringify(g_state.users));
+    res.send(JSON.stringify(data_base.users));
     res.status(status_codes.ACCEPTED);
 }
 
