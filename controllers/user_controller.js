@@ -55,6 +55,10 @@ async function login_user(req, res)
         {
             res.status(400).send("you are already login!")
         }
+        if(user.status !== Status.active)
+        {
+            res.status(400).send("you need to be activated first!")
+        }
         if (user && (bcrypt.compareSync(password, user.password))) {
            const token  = jwt.sign(
                 { user_id: user.id, email },

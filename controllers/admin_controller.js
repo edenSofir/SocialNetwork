@@ -28,7 +28,6 @@ function get_user(req, res) {
 
 async function create_new_user(req, res) {
     try {
-        console.log("at start of create_new_user",data_base.users, "end")
         const {full_name, email, password} = req.body;
         if (!(password && email && full_name)) {
             res.status(400).send("all input required. please try again");
@@ -44,7 +43,7 @@ async function create_new_user(req, res) {
         const id = data_base.user_id += 1;
         const new_user = await new user.User(full_name, id, email.toLowerCase(), encrypted_password);
         data_base.users.push(new_user);
-        data_base.save_data_to_file().then(r => console.log("saved data updated"));
+        await data_base.save_data_to_file();
         res.status(201).send(JSON.stringify(new_user));
     }
     catch (err)
@@ -54,8 +53,9 @@ async function create_new_user(req, res) {
 }
 
 async function delete_current_user(req, res) {
-    const token = req.headers.token;
-    const user = g_state.find_user_by_token(token);
+    const id = req.body;
+    const current_user_id = parseInt(id); //should we check if not an int?
+    const user = g_state.find_user_by_id(current_user_id);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
@@ -72,65 +72,61 @@ async function delete_current_user(req, res) {
 }
 
 async function restore_user(req, res) {
-    const token = req.headers.token;
-    const user = g_state.find_user_by_token(token);
-    console.log("before restore: ", user);
+    const id = req.body;
+    const current_user_id = parseInt(id); //should we check if not an int?
+    const user = g_state.find_user_by_id(current_user_id);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
-        return;
     }
-    if (user.id === 0) {
+    else if(user.id === 0) {
         res.status(status_codes.FORBIDDEN);
         res.send("the current id is the admin user - always active");
-        return;
     }
-
-    admin_services.restore_suspend_user(user);
-    console.log("after restore: ", user);
-    await data_base.save_data_to_file().then(r => console.log("saved data updated"));
-    res.send(JSON.stringify(data_base.users)); //new array
+    else {
+        admin_services.restore_suspend_user(user);
+        await data_base.save_data_to_file().then(r => console.log("saved data updated"));
+        res.send(JSON.stringify(data_base.users));
+    }
 }
 
 async function suspend_user(req, res) {
-    const token = req.headers.token;
-    const user = g_state.find_user_by_token(token);
+    const id = req.body;
+    const current_user_id = parseInt(id); //should we check if not an int?
+    const user = g_state.find_user_by_id(current_user_id);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
-        return;
     }
-    if (user.id === 0) {
+    else if(user.id === 0) {
         res.status(status_codes.FORBIDDEN);
         res.send("the current id is the admin user - already active");
-        return;
     }
-    admin_services.suspend_user(user);
-    await data_base.save_data_to_file().then(r => "saved data updated");
-    res.send(JSON.stringify(data_base.users)); //new array
+    else {
+        admin_services.suspend_user(user);
+        await data_base.save_data_to_file().then(r => "saved data updated");
+        res.send(JSON.stringify(data_base.users)); //new array
+    }
 }
 
 async function approve_user(req, res) {
-    const id = parseInt(req.headers.id);
-    const user = g_state.find_user_by_id(id);
+    const id = req.body;
+    const current_user_id = parseInt(id); //should we check if not an int?
+    const user = g_state.find_user_by_id(current_user_id);
     if (!user) {
         res.status(status_codes.NOT_FOUND);
         res.send("there is no such user in our users array");
-        return;
     }
-    if (user.id === 0) {
+    else if(user.id === 0) {
         res.status(status_codes.FORBIDDEN);
         res.send("the current id is the admin user - already active");
-        return;
     }
-    if(admin_services.approve_join_request(user)) {
+    else
+    {
+        admin_services.approve_join_request(user) //should we check if he is already approved
         await data_base.save_data_to_file();
         res.status(status_codes.ACCEPTED);
         res.send(JSON.stringify(data_base.users)); //new array
-    }
-    else {
-        res.send("invalid email - email already exists. please login");
-        res.status(status_codes.FORBIDDEN);
     }
 
 }
