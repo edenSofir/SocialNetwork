@@ -1,4 +1,5 @@
 const data_base = require('../JavaScript/data_base');
+const messages = require('../models/Messages');
 
 class User{
 
@@ -39,7 +40,7 @@ class User{
     send_message(recipient, text) {
 
         if (this.status === Status.active && this.is_logon === true) {
-            const message = new Message(text, data_base.message_id, this);
+            const message = new messages.Message(text, data_base.message_id, this);
             data_base.message_id += 1;
             recipient.messages.push(message);
             return true;
@@ -68,13 +69,8 @@ function get_post_index(user, post_to_find) {
             if (post === post_to_find)
                 return index;
         });
-
-        return -1;
     }
-    else
-    {
-        return false;
-    }
+    return -1;
 }
 
 const Status = {
