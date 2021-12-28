@@ -4,13 +4,7 @@ const messages = require('../models/Messages');
 const data_base = require('../JavaScript/data_base');
 
 approve_join_request = function (current_user) {
-
-    data_base.users.forEach((user, index) => {
-        if (user.email_address === current_user.email_address)
-            return false;
-    });
     current_user.status = users.Status.active;
-    return true;
 }
 
 suspend_user = function (current_user) {
