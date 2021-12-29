@@ -11,6 +11,7 @@ approve_join_request = function (current_user) {
 suspend_user = function (current_user) {
 
     current_user.status = users.Status.suspended;
+    current_user.is_logon = false;
 }
 
 delete_user = function (current_user) {
