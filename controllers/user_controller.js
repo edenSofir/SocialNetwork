@@ -44,8 +44,7 @@ async function delete_user_account(req, res) {
     })
 }
 
-async function login_user(req, res)
-{
+async function login_user(req, res) {
         const { email, password } = req.body;
         if (!(email && password)) {
             res.status(400).send("All input is required");
@@ -75,8 +74,7 @@ async function login_user(req, res)
         }
 }
 
-async function logoff_user(req, res)
-{
+async function logoff_user(req, res) {
         const auth_header = req.headers["authorization"];
         const current_token = auth_header && auth_header.split(" ")[1];
 
