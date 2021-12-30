@@ -21,7 +21,7 @@ function get_user(req, res) {
             if (user.is_logon) {
                 const id = req.body.id;
                 const current_user_id = parseInt(id); //should we check if not an int?
-                res.send(JSON.stringify(user));
+                res.send(JSON.stringify(g_state.find_user_by_id(current_user_id)));
             }
         }
     });
@@ -211,6 +211,7 @@ function send_message_to_all(req, res) {
                     return;
                 }
                 admin_services.send_message_to_all_users(message);
+                await data_base.save_data_to_file();
                 res.send(JSON.stringify(data_base.users));
                 res.status(status_codes.ACCEPTED);
             }

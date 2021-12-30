@@ -50,7 +50,7 @@ async function login_user(req, res) {
             res.status(400).send("All input is required");
         }
         const user = await g_state.find_user_by_email(email) ;
-        if(user.is_logon === true)
+        if(user.is_logon)
         {
             res.status(400).send("you are already login!")
         }
@@ -66,6 +66,7 @@ async function login_user(req, res) {
            );
             await data_base.save_data_to_file();
             user.is_logon = true;
+            console.log("user after login: ", user);
             console.log("the data has saved properly")
             res.status(200).json(token);
         }
@@ -101,6 +102,7 @@ async function logoff_user(req, res) {
             }
         });
 }
+
 module.exports = {
     delete_user_account,
     login_user,

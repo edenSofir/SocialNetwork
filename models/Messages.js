@@ -1,11 +1,10 @@
 
 class Message {
 
-    constructor(text, id, sender) {
+    constructor(text, id) {
         this.text = text;
         this.id = id;
         this.date = Date.now();
-        this.sender = sender; //user
     }
 
 }
