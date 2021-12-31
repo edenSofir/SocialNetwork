@@ -155,34 +155,37 @@ async function approve_user(req, res) {
 
     const auth_header = req.headers["authorization"];
     const current_token = auth_header && auth_header.split(" ")[1];
+    console.log(current_token)
     if (!current_token) {
         res.status(400).send("the token is invalid");
     }
-    jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
-        if (err) {
-            res.status(400).send("token is invalid, please try again later");
-        } else {//token is OK!
-            const admin = g_state.find_user_by_id(user_payload.user_id);
-            if (admin === data_base.users[0] && admin.is_logon) {
-                const id = req.body.id;
-                const current_user_id = parseInt(id); //should we check if not an int?
-                const user = g_state.find_user_by_id(current_user_id);
-                if (!user) {
-                    res.status(status_codes.NOT_FOUND);
-                    res.send("there is no such user in our users array");
-                } else if (user.id === 0) {
-                    res.status(status_codes.FORBIDDEN);
-                    res.send("the current id is the admin user - already active");
-                } else {
-                    admin_services.approve_join_request(user) //should we check if he is already approved
-                    await data_base.save_data_to_file();
-                    res.status(status_codes.ACCEPTED);
-                    res.send(JSON.stringify(data_base.users)); //new array
-                }
+    else {
+        jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
+            if (err) {
+                res.status(400).send("token is invalid, please try again later");
+            } else {
+                const admin = g_state.find_user_by_id(user_payload.user_id);
+                if (admin === data_base.users[0] && admin.is_logon) {
+                    const id = req.body.id;
+                    const current_user_id = parseInt(id);
+                    const user = g_state.find_user_by_id(current_user_id);
+                    if (!user) {
+                        res.status(status_codes.NOT_FOUND);
+                        res.send("there is no such user in our users array");
+                    } else if (user.id === 0) {
+                        res.status(status_codes.FORBIDDEN);
+                        res.send("the current id is the admin user - already active");
+                    } else {
+                        admin_services.approve_join_request(user) //should we check if he is already approved
+                        await data_base.save_data_to_file();
+                        res.status(status_codes.ACCEPTED);
+                        res.send(JSON.stringify(data_base.users)); //new array
+                    }
 
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 function get_all_users(req, res) {
