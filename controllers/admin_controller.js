@@ -113,7 +113,7 @@ async function approve_user(req, res) {
         admin_services.approve_join_request(user) //should we check if he is already approved
         await data_base.save_data_to_file();
         res.status(status_codes.ACCEPTED);
-        res.send(JSON.stringify(data_base.users)); //new array
+        res.send(JSON.stringify(user)); //new array
     }
 
 }
