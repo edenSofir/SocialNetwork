@@ -21,7 +21,14 @@ function get_user(req, res) {
             if (user.is_logon) {
                 const id = req.body.id;
                 const current_user_id = parseInt(id); //should we check if not an int?
-                res.send(JSON.stringify(g_state.find_user_by_id(current_user_id)));
+                const current_user = g_state.find_user_by_id(current_user_id);
+                if(!current_user)
+                {
+                    res.status(status_codes.NOT_FOUND);
+                    res.send("there is no such user in our users array");
+                    return;
+                }
+                res.send(JSON.stringify(current_user)).status(200);
             }
         }
     });
