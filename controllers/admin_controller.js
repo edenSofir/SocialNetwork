@@ -187,8 +187,19 @@ async function approve_user(req, res) {
 
 function get_all_users(req, res) {
 
-    res.send(JSON.stringify(admin_services.get_all_users()));
-    res.status(status_codes.ACCEPTED)
+    const auth_header = req.headers["authorization"];
+    const current_token = auth_header && auth_header.split(" ")[1];
+    if (!current_token) {
+        res.status(400).send("the token is invalid");
+    }
+    jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
+        if (err) {
+            res.status(400).send("token is invalid, please try again later");
+        } else {
+            res.send(JSON.stringify(admin_services.get_all_users()));
+            res.status(status_codes.ACCEPTED)
+        }
+    });
 }
 
 function send_message_to_all(req, res) {
