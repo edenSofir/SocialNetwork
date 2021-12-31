@@ -1,7 +1,6 @@
 const post_services = require('../services/post_services');
 const data_base = require('../JavaScript/data_base')
 const g_state = require("../JavaScript/g_state");
-const {save_data_to_file} = require("../JavaScript/data_base");
 const jwt = require("jsonwebtoken");
 const status_codes = require("http-status-codes").StatusCodes;
 

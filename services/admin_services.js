@@ -11,6 +11,7 @@ approve_join_request = function (current_user) {
 suspend_user = function (current_user) {
 
     current_user.status = users.Status.suspended;
+    current_user.is_logon = false;
 }
 
 delete_user = function (current_user) {
@@ -35,7 +36,7 @@ delete_a_post_from_user = function (current_user, post_id) {
 
 send_message_to_all_users = function (message_to_send) {
 
-    const message = new messages.Message(message_to_send, data_base.message_id, Date.now(), admin);
+    const message = new messages.Message(message_to_send, data_base.message_id, Date.now());
     data_base.message_id += 1;
     data_base.users.forEach((user) => {
         if(user.id !== 0) {
