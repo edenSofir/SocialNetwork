@@ -219,25 +219,28 @@ function send_message_to_all(req, res) {
     if (!current_token) {
         res.status(400).send("the token is invalid");
     }
-    jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
-        if (err) {
-            res.status(400).send("token is invalid, please try again later");
-        } else {//token is OK!
-            const admin = g_state.find_user_by_id(user_payload.user_id);
-            if (admin === data_base.users[0] && admin.is_logon) {
-                const message = req.body.message;
-                if (!message) {
-                    res.send("Invalid message");
-                    res.status(status_codes.BAD_REQUEST);
-                    return;
+    else {
+        jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
+            if (err) {
+                res.status(400).send("token is invalid, please try again later");
+            } else {
+                const admin = g_state.find_user_by_id(user_payload.user_id);
+                if (admin === data_base.users[0] && admin.is_logon) {
+                    const message = req.body.message;
+                    if (!message) {
+                        res.send("Invalid message");
+                        res.status(status_codes.BAD_REQUEST);
+                    }
+                    else {
+                        admin_services.send_message_to_all_users(message);
+                        await data_base.save_data_to_file();
+                        res.status(status_codes.ACCEPTED);
+                        res.send(JSON.stringify(data_base.users));
+                    }
                 }
-                admin_services.send_message_to_all_users(message);
-                await data_base.save_data_to_file();
-                res.send(JSON.stringify(data_base.users));
-                res.status(status_codes.ACCEPTED);
             }
-        }
-    });
+        });
+    }
 }
 
 module.exports = {
