@@ -88,7 +88,7 @@ async function delete_current_user(req, res) {
                 }
                 admin_services.delete_user(user);//admin deletes the user
                 await data_base.save_data_to_file();
-                res.send(JSON.stringify(data_base.users)); //new array
+                res.send(JSON.stringify(data_base.users)).status(200); //new array
             }
         }
     });
