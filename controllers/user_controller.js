@@ -13,36 +13,29 @@ async function delete_user_account(req, res) {
     {
         res.status(400).send("the token is invalid");
     }
-    jwt.verify(current_token,data_base.secret_jwt, async (err, user_payload) => {
-        if(err)
-        {
-            console.log(err);
-        }
-        else
-        {
-            if(user_payload.user_id === 0)
-            {
-                res.status(status_codes.FORBIDDEN);
-                res.send("the current id is the admin user - he can not be deleted");
-            }
-            else
-            {
-                const user = g_state.find_user_by_id(user_payload.user_id);
-                if(user.is_logon === true)
-                {
-                    user_services.delete_user_account(user);
-                    await data_base.save_data_to_file();
-                    res.status(status_codes.OK);
-                    res.send(JSON.stringify(data_base.users));
-                }
-                else
-                {
+    else {
+        jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
+            if (err) {
+                console.log(err);
+            } else {
+                if (user_payload.user_id === 0) {
                     res.status(status_codes.FORBIDDEN);
-                    res.send("you are logoff - please preform login first!");
+                    res.send("the current id is the admin user - he can not be deleted");
+                } else {
+                    const user = g_state.find_user_by_id(user_payload.user_id);
+                    if (user.is_logon === true) {
+                        user_services.delete_user_account(user);
+                        await data_base.save_data_to_file();
+                        res.status(status_codes.OK);
+                        res.send(JSON.stringify(data_base.users));
+                    } else {
+                        res.status(status_codes.FORBIDDEN);
+                        res.send("you are logoff - please preform login first!");
+                    }
                 }
             }
-        }
-    })
+        })
+    }
 }
 
 async function login_user(req, res) {
@@ -51,15 +44,17 @@ async function login_user(req, res) {
             res.status(400).send("All input is required");
         }
         const user = await g_state.find_user_by_email(email) ;
-        if(user.is_logon)
+        if(!user)
         {
+            res.status(400).send("user is undefined")
+        }
+        else if(user.is_logon) {
             res.status(400).send("you are already login!")
         }
-        if(user.status !== Status.active)
-        {
+        else if(user.status !== Status.active) {
             res.status(400).send("you need to be activated first!")
         }
-        if (user && (bcrypt.compareSync(password, user.password))) {
+        else if((bcrypt.compareSync(password, user.password))) {
            const token  = jwt.sign(
                 { user_id: user.id, email },
                         data_base.secret_jwt,
