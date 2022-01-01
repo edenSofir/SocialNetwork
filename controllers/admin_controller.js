@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const user = require("../models/User");
 const jwt = require("jsonwebtoken");
 const status_codes = require("http-status-codes").StatusCodes;
+const id_data = require('../JavaScript/id_data');
 
 function get_user(req, res) {
 
@@ -48,9 +49,9 @@ async function create_new_user(req, res) {
         }
 
         const encrypted_password = await bcrypt.hash(password, 10);
-        const id = data_base.user_id += 1;
+        const id = id_data.user_id += 1;
         const new_user = await new user.User(full_name, id, email.toLowerCase(), encrypted_password);
-        data_base.users.push(new_user);
+        id_data.users.push(new_user);
         await data_base.save_data_to_file();
         res.status(201).send(JSON.stringify(new_user));
     }
@@ -72,7 +73,7 @@ async function delete_current_user(req, res) {
             res.status(400).send("token is invalid, please try again later");
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
-            if (admin === data_base.users[0] && admin.is_logon) {
+            if (admin === id_data.users[0] && admin.is_logon) {
                 const id = req.body.id;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
@@ -88,7 +89,7 @@ async function delete_current_user(req, res) {
                 }
                 admin_services.delete_user(user);//admin deletes the user
                 await data_base.save_data_to_file();
-                res.send(JSON.stringify(data_base.users)).status(200); //new array
+                res.send(JSON.stringify(id_data.users)).status(200); //new array
             }
         }
     });
@@ -106,7 +107,7 @@ async function restore_user(req, res) {
             res.status(400).send("token is invalid, please try again later");
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
-            if (admin === data_base.users[0] && admin.is_logon) {
+            if (admin === id_data.users[0] && admin.is_logon) {
                 const id = req.body.id;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
@@ -119,7 +120,7 @@ async function restore_user(req, res) {
                 } else {
                     admin_services.restore_suspend_user(user);
                     await data_base.save_data_to_file().then(r => console.log("saved data updated"));
-                    res.send(JSON.stringify(data_base.users));
+                    res.send(JSON.stringify(id_data.users));
                 }
             }
         }
@@ -138,7 +139,7 @@ async function suspend_user(req, res) {
             res.status(400).send("token is invalid, please try again later");
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
-            if (admin === data_base.users[0] && admin.is_logon) {
+            if (admin === id_data.users[0] && admin.is_logon) {
                 const id = req.body.id;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
@@ -151,7 +152,7 @@ async function suspend_user(req, res) {
                 } else {
                     admin_services.suspend_user(user);
                     await data_base.save_data_to_file().then(r => "saved data updated");
-                    res.send(JSON.stringify(data_base.users)); //new array
+                    res.send(JSON.stringify(id_data.users)); //new array
                 }
             }
         }
@@ -162,7 +163,6 @@ async function approve_user(req, res) {
 
     const auth_header = req.headers["authorization"];
     const current_token = auth_header && auth_header.split(" ")[1];
-    console.log(current_token)
     if (!current_token) {
         res.status(400).send("the token is invalid");
     }
@@ -172,7 +172,7 @@ async function approve_user(req, res) {
                 res.status(400).send("token is invalid, please try again later");
             } else {
                 const admin = g_state.find_user_by_id(user_payload.user_id);
-                if (admin === data_base.users[0] && admin.is_logon) {
+                if (admin === id_data.users[0] && admin.is_logon) {
                     const id = req.body.id;
                     const current_user_id = parseInt(id);
                     const user = g_state.find_user_by_id(current_user_id);
@@ -186,7 +186,7 @@ async function approve_user(req, res) {
                         admin_services.approve_join_request(user) //should we check if he is already approved
                         await data_base.save_data_to_file();
                         res.status(status_codes.ACCEPTED);
-                        res.send(JSON.stringify(data_base.users)); //new array
+                        res.send(JSON.stringify(id_data.users)); //new array
                     }
 
                 }
@@ -206,8 +206,14 @@ function get_all_users(req, res) {
         if (err) {
             res.status(400).send("token is invalid, please try again later");
         } else {
-            res.send(JSON.stringify(admin_services.get_all_users()));
-            res.status(status_codes.ACCEPTED)
+            const user = g_state.find_user_by_id(user_payload.user_id);
+            if(user.is_logon) {
+                res.send(JSON.stringify(admin_services.get_all_users()));
+                res.status(status_codes.ACCEPTED)
+            }
+            else{
+                res.status(status_codes.FORBIDDEN).send("You are not logg on ");
+            }
         }
     });
 }
@@ -225,17 +231,17 @@ function send_message_to_all(req, res) {
                 res.status(400).send("token is invalid, please try again later");
             } else {
                 const admin = g_state.find_user_by_id(user_payload.user_id);
-                if (admin === data_base.users[0] && admin.is_logon) {
+                if (admin === id_data.users[0] && admin.is_logon) {
                     const message = req.body.message;
                     if (!message) {
-                        res.send("Invalid message");
                         res.status(status_codes.BAD_REQUEST);
+                        res.send("Invalid message");
                     }
                     else {
                         admin_services.send_message_to_all_users(message);
                         await data_base.save_data_to_file();
                         res.status(status_codes.ACCEPTED);
-                        res.send(JSON.stringify(data_base.users));
+                        res.send(JSON.stringify(id_data.users));
                     }
                 }
             }

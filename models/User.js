@@ -1,6 +1,6 @@
-const data_base = require('../JavaScript/data_base');
 const messages = require('../models/Messages');
 const posts = require('../models/Posts');
+const id_data = require('../JavaScript/id_data');
 
 class User{
 
@@ -16,15 +16,12 @@ class User{
         this.is_logon = false ;
     };
 
-    publish_post(text){
-
-        if(this.status === Status.active && this.is_logon === true) {
-            const post = new posts.Post(text, data_base.post_id);
-            data_base.post_id += 1;
-            this.posts.push(post);
-            return true;
-        }
-        return false;
+    publish_post(text) {
+        console.log("publish_post");
+        const post = new posts.Post(text, id_data.post_id);
+        id_data.post_id += 1;
+        this.posts.push(post);
+        return post;
     }
 
     delete_post(post_id) {
@@ -35,7 +32,6 @@ class User{
             if(!post) return false;
             const index = this.posts.indexOf(post);
             this.posts.splice(index, 1);
-            console.log("posts: ", this.posts);
             return true;
         }
     }
@@ -43,8 +39,8 @@ class User{
     send_message(recipient, text) {
 
         if (this.status === Status.active && this.is_logon === true) {
-            const message = new messages.Message(text, data_base.message_id);
-            data_base.message_id += 1;
+            const message = new messages.Message(text, id_data.message_id);
+            id_data.message_id += 1;
             recipient.messages.push(message);
             return true;
         }
@@ -54,9 +50,9 @@ class User{
     delete() {
         if(this.status === Status.active && this.is_logon === true) {
             //TODO: code duplication
-            data_base.users.forEach((user, index) => {
+            id_data.users.forEach((user, index) => {
                 if (user.id === this.id) {
-                    data_base.users.splice(index, 1);
+                    id_data.users.splice(index, 1);
                 }
             });
             return true;

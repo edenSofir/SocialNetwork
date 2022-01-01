@@ -2,6 +2,7 @@ const message_services = require('../services/message_services');
 const data_base = require('../JavaScript/data_base');
 const g_state = require("../JavaScript/g_state");
 const jwt = require("jsonwebtoken");
+const id_data = require("../JavaScript/id_data");
 const status_codes = require("http-status-codes").StatusCodes;
 
 async function send_a_message(req, res) {
@@ -42,7 +43,7 @@ async function send_a_message(req, res) {
                     return;
                 }
                 await data_base.save_data_to_file();
-                res.send(JSON.stringify(data_base.users)); //new array
+                res.send(JSON.stringify(id_data.users)); //new array
             }
             else {
                 res.status(status_codes.FORBIDDEN);

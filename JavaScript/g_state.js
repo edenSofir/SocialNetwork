@@ -1,27 +1,18 @@
-const data_base = require('../JavaScript/data_base')
+const id_data = require('../JavaScript/id_data');
 
 function find_user_by_email(email) {
-    console.log(data_base.users)
-    const user = data_base.users.find(user => user.email_address === email);
-    console.log("current user: ",user)
+    const user = id_data.users.find(user => user.email_address === email);
     return user;
 }
 
 function find_user_by_id(id) {
 
-    return data_base.users.find(user => user.id === id);
-}
-
-function find_user_by_token(token) {
-    console.log("input:",token)
-    console.log("all users for now to search in by token",data_base.users)
-    return data_base.users.find(user => user.token === token);
+    return id_data.users.find(user => user.id === id);
 }
 
 module.exports = {
     find_user_by_email,
     find_user_by_id,
-    find_user_by_token
 }
 
 

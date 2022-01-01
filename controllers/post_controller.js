@@ -3,6 +3,7 @@ const data_base = require('../JavaScript/data_base')
 const g_state = require("../JavaScript/g_state");
 const jwt = require("jsonwebtoken");
 const status_codes = require("http-status-codes").StatusCodes;
+const id_data = require('../JavaScript/id_data');
 
 async function post_post(req, res) {
     const post_text = req.body.text; //should be post id?
@@ -23,10 +24,9 @@ async function post_post(req, res) {
         } else {//token is OK!
             const user = g_state.find_user_by_id(user_payload.user_id);
             if (user.is_logon) {
-
-                post_services.publish_current_post(user, post_text)
+                const post = post_services.publish_current_post(user, post_text)
                 await data_base.save_data_to_file()
-                res.send(JSON.stringify(user)).status(status_codes.ACCEPTED);
+                res.send(JSON.stringify(post)).status(status_codes.ACCEPTED);
             }
             else {
                 res.status(status_codes.FORBIDDEN);
@@ -63,7 +63,7 @@ function get_all_posts(req, res) {
 async function delete_current_post(req, res) {
     const post_id = parseInt(req.body.id);
 
-    if (post_id < 1 || post_id > data_base.post_id) {
+    if (post_id < 1 || post_id > id_data.post_id) {
         res.status(status_codes.BAD_REQUEST);
         res.send("the current post is invalid - out of range");
         return;
@@ -96,9 +96,6 @@ async function delete_current_post(req, res) {
     });
 
 }
-
-
-
 
 module.exports = {
     post_post,

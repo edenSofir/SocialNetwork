@@ -1,9 +1,9 @@
 const g_state = require("../JavaScript/g_state");
-const data_base = require("../JavaScript/data_base");
+const id_data = require('../JavaScript/id_data');
 
 const delete_user_account = function (sender_id) {
-    const index = data_base.users.indexOf(g_state.find_user_by_id(sender_id));
-    data_base.users.splice(index, 1);
+    const index = id_data.users.indexOf(g_state.find_user_by_id(sender_id));
+    id_data.users.splice(index, 1);
 }
 
 module.exports = { delete_user_account }

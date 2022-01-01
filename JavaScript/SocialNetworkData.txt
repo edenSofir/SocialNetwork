@@ -1,0 +1,1 @@
+{"users":[{"full_name":"Admin","id":0,"email_address":"admin@admin.com","password":"$2a$10$iZw22RTxq.KCkLVdJsKe7e7lmSDTIlgRQNOSjYjlo8H8LYjM95wDK","creationDate":1641069439319,"status":2,"posts":[],"messages":[],"is_logon":true}],"user_id":8,"post_id":5,"message_id":9}

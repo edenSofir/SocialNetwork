@@ -1,13 +1,13 @@
 
-const  data_base = require('../JavaScript/data_base');
+const id_data = require('../JavaScript/id_data');
 
 publish_current_post = function (current_user, txt) {
-    current_user.publish_post(txt);
+    return current_user.publish_post(txt);
 }
 
 get_all_posts_from_users = function () {
     const all_posts =[]
-    data_base.users.forEach((user,index )=>
+    id_data.users.forEach((user,index )=>
         user.posts.forEach((post,index) => all_posts.push(post) ));
 
     return all_posts;

@@ -3,6 +3,8 @@ const g_state = require("../JavaScript/g_state");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const data_base = require("../JavaScript/data_base");
+const id_data = require('../JavaScript/id_data');
+
 const {Status} = require("../models/User");
 const status_codes = require("http-status-codes").StatusCodes;
 
@@ -27,7 +29,7 @@ async function delete_user_account(req, res) {
                         user_services.delete_user_account(user);
                         await data_base.save_data_to_file();
                         res.status(status_codes.OK);
-                        res.send(JSON.stringify(data_base.users));
+                        res.send(JSON.stringify(id_data.users));
                     } else {
                         res.status(status_codes.FORBIDDEN);
                         res.send("you are logoff - please preform login first!");
@@ -62,9 +64,8 @@ async function login_user(req, res) {
            );
             await data_base.save_data_to_file();
             user.is_logon = true;
-            console.log("user after login: ", user);
-            console.log("the data has saved properly")
-            res.status(200).json(token);
+            const ret = { token: token, id: user.id};
+            res.status(200).json(ret);
         }
         else {
             res.status(400).send("Invalid Credentials");
@@ -87,7 +88,6 @@ async function logoff_user(req, res) {
                 if(user.is_logon === true)
                 {
                     user.is_logon = false;
-                    console.log("logoff preformed");
                     await data_base.save_data_to_file();
                     res.status(200).json(user);
                 }
