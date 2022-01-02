@@ -1,4 +1,3 @@
-const g_state = require("../JavaScript/g_state");
 const express = require('express');
 
 

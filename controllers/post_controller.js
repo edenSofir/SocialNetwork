@@ -26,7 +26,7 @@ async function post_post(req, res) {
             if (user.is_logon) {
                 const post = post_services.publish_current_post(user, post_text)
                 await data_base.save_data_to_file()
-                res.send(JSON.stringify(post)).status(status_codes.ACCEPTED);
+                res.status(status_codes.ACCEPTED).send(JSON.stringify(post));
             }
             else {
                 res.status(status_codes.FORBIDDEN);
@@ -87,7 +87,7 @@ async function delete_current_post(req, res) {
                     return;
                 }
                 await data_base.save_data_to_file()
-                res.status(status_codes.ACCEPTED).send(JSON.stringify(data_base.users));
+                res.status(status_codes.ACCEPTED).send(JSON.stringify(id_data.users));
             } else {
                 res.status(status_codes.FORBIDDEN);
                 res.send("You need to login first :)");

@@ -89,7 +89,7 @@ async function delete_current_user(req, res) {
                 }
                 admin_services.delete_user(user);//admin deletes the user
                 await data_base.save_data_to_file();
-                res.send(JSON.stringify(id_data.users)).status(200); //new array
+                res.status(200).send(JSON.stringify(id_data.users)); //new array
             }
         }
     });
@@ -208,8 +208,8 @@ function get_all_users(req, res) {
         } else {
             const user = g_state.find_user_by_id(user_payload.user_id);
             if(user.is_logon) {
+                res.status(status_codes.ACCEPTED);
                 res.send(JSON.stringify(admin_services.get_all_users()));
-                res.status(status_codes.ACCEPTED)
             }
             else{
                 res.status(status_codes.FORBIDDEN).send("You are not logg on ");

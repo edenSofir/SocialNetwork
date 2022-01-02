@@ -25,7 +25,7 @@ async function delete_user_account(req, res) {
                     res.send("the current id is the admin user - he can not be deleted");
                 } else {
                     const user = g_state.find_user_by_id(user_payload.user_id);
-                    if (user.is_logon === true) {
+                    if (user.is_logon) {
                         user_services.delete_user_account(user);
                         await data_base.save_data_to_file();
                         res.status(status_codes.OK);
