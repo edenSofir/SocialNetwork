@@ -9,11 +9,11 @@ const {Status} = require("../models/User");
 const status_codes = require("http-status-codes").StatusCodes;
 
 async function delete_user_account(req, res) {
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if(current_token == null)
     {
         res.status(400).send("the token is invalid");
+        return;
     }
     else {
         jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
@@ -23,6 +23,7 @@ async function delete_user_account(req, res) {
                 if (user_payload.user_id === 0) {
                     res.status(status_codes.FORBIDDEN);
                     res.send("the current id is the admin user - he can not be deleted");
+                    return;
                 } else {
                     const user = g_state.find_user_by_id(user_payload.user_id);
                     if (user.is_logon) {
@@ -30,9 +31,11 @@ async function delete_user_account(req, res) {
                         await data_base.save_data_to_file();
                         res.status(status_codes.OK);
                         res.send(JSON.stringify(id_data.users));
+                        return;
                     } else {
                         res.status(status_codes.FORBIDDEN);
                         res.send("you are logoff - please preform login first!");
+                        return;
                     }
                 }
             }
@@ -49,12 +52,15 @@ async function login_user(req, res) {
         if(!user)
         {
             res.status(400).send("user is undefined")
+            return;
         }
         else if(user.is_logon) {
             res.status(400).send("you are already login!")
+            return;
         }
         else if(user.status !== Status.active) {
             res.status(400).send("you need to be activated first!")
+            return;
         }
         else if((bcrypt.compareSync(password, user.password))) {
            const token  = jwt.sign(
@@ -69,20 +75,21 @@ async function login_user(req, res) {
         }
         else {
             res.status(400).send("Invalid Credentials");
+            return;
         }
 }
 
 async function logoff_user(req, res) {
-        const auth_header = req.headers["authorization"];
-        const current_token = auth_header && auth_header.split(" ")[1];
-
+        const current_token = req.headers["authorization"];
         if(current_token == null)
         {
             res.status(400).send("the token is invalid");
+            return;
         }
         jwt.verify(current_token,data_base.secret_jwt, async (err, user_payload) => {
             if (err) {
                 res.status(400).send("token is invalid, please try again later");
+                return;
             } else {
                 const user = g_state.find_user_by_id(user_payload.user_id);
                 if(user.is_logon === true)
@@ -90,10 +97,12 @@ async function logoff_user(req, res) {
                     user.is_logon = false;
                     await data_base.save_data_to_file();
                     res.status(200).json(user);
+                    return;
                 }
                 else
                 {
                     res.status(400).send("you are already logout!");
+                    return;
                 }
             }
         });

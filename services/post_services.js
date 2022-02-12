@@ -2,7 +2,7 @@
 const id_data = require('../JavaScript/id_data');
 
 publish_current_post = function (current_user, txt) {
-    return current_user.publish_post(txt);
+    return current_user.publish_post(txt,current_user.id);
 }
 
 get_all_posts_from_users = function () {

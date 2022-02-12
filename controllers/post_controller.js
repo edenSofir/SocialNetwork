@@ -13,15 +13,16 @@ async function post_post(req, res) {
         return;
     }
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
+        return;
     }
     jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
         if (err) {
             res.status(400).send("token is invalid, please try again later");
-        } else {//token is OK!
+            return;
+        } else {
             const user = g_state.find_user_by_id(user_payload.user_id);
             if (user.is_logon) {
                 const post = post_services.publish_current_post(user, post_text)
@@ -31,6 +32,7 @@ async function post_post(req, res) {
             else {
                 res.status(status_codes.FORBIDDEN);
                 res.send("You need to login first :)");
+                return;
             }
         }
     });
@@ -38,15 +40,16 @@ async function post_post(req, res) {
 
 function get_all_posts(req, res) {
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
+        return;
     }
     jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
         if (err) {
             res.status(400).send("token is invalid, please try again later");
-        } else {//token is OK!
+            return;
+        } else {
             const user = g_state.find_user_by_id(user_payload.user_id);
             if (user.is_logon) {
                 const all_posts = post_services.get_all_posts_from_users();
@@ -55,6 +58,7 @@ function get_all_posts(req, res) {
             else {
                 res.status(status_codes.FORBIDDEN);
                 res.send("You need to login first :)");
+                return;
             }
         }
     });
@@ -69,14 +73,15 @@ async function delete_current_post(req, res) {
         return;
     }
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
+        return;
     }
     jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
         if (err) {
             res.status(400).send("token is invalid, please try again later");
+            return;
         } else {//token is OK!
             const user = g_state.find_user_by_id(user_payload.user_id);
             if (user.is_logon) {
@@ -91,6 +96,7 @@ async function delete_current_post(req, res) {
             } else {
                 res.status(status_codes.FORBIDDEN);
                 res.send("You need to login first :)");
+                return
             }
         }
     });

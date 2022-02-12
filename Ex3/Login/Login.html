@@ -1,0 +1,21 @@
+<html>
+
+<head>
+	<title>Login-Page</title>
+	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="../CookieSetGet.js"></script>
+    <script src="Login.js" type = "text/babel"></script>
+</head>
+
+<body>
+	<div id='container'></div>
+</body>
+
+<script type="text/babel">
+const domContainer = document.querySelector('#container');
+ReactDOM.render( <Login/> , domContainer);
+</script>
+
+</html>

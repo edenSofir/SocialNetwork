@@ -16,9 +16,9 @@ class User{
         this.is_logon = false ;
     };
 
-    publish_post(text) {
+    publish_post(text,user_id) {
         console.log("publish_post");
-        const post = new posts.Post(text, id_data.post_id);
+        const post = new posts.Post(text, id_data.post_id,user_id);
         id_data.post_id += 1;
         this.posts.push(post);
         return post;

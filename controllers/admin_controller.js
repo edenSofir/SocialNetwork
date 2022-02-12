@@ -9,18 +9,18 @@ const id_data = require('../JavaScript/id_data');
 
 function get_user(req, res) {
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
     }
     jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
         if (err) {
             res.status(400).send("token is invalid, please try again later");
+            return;
         } else {//token is OK!
             const user = g_state.find_user_by_id(user_payload.user_id);
             if (user.is_logon) {
-                const id = req.body.id;
+                const id = req.body.text;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const current_user = g_state.find_user_by_id(current_user_id);
                 if(!current_user)
@@ -63,18 +63,19 @@ async function create_new_user(req, res) {
 
 async function delete_current_user(req, res) {
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
+        return;
     }
     jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
         if (err) {
             res.status(400).send("token is invalid, please try again later");
+            return;
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
             if (admin === id_data.users[0] && admin.is_logon) {
-                const id = req.body.id;
+                const id = req.body.text;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
                 if (!user) {
@@ -90,6 +91,7 @@ async function delete_current_user(req, res) {
                 admin_services.delete_user(user);//admin deletes the user
                 await data_base.save_data_to_file();
                 res.status(200).send(JSON.stringify(id_data.users)); //new array
+                return;
             }
         }
     });
@@ -97,30 +99,34 @@ async function delete_current_user(req, res) {
 
 async function restore_user(req, res) {
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
+        return;
     }
     jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
         if (err) {
             res.status(400).send("token is invalid, please try again later");
+            return;
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
             if (admin === id_data.users[0] && admin.is_logon) {
-                const id = req.body.id;
+                const id = req.body.text;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
                 if (!user) {
                     res.status(status_codes.NOT_FOUND);
                     res.send("there is no such user in our users array");
+                    return;
                 } else if (user.id === 0) {
                     res.status(status_codes.FORBIDDEN);
                     res.send("the current id is the admin user - always active");
+                    return;
                 } else {
                     admin_services.restore_suspend_user(user);
                     await data_base.save_data_to_file().then(r => console.log("saved data updated"));
                     res.send(JSON.stringify(id_data.users));
+                    return;
                 }
             }
         }
@@ -129,30 +135,34 @@ async function restore_user(req, res) {
 
 async function suspend_user(req, res) {
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
+        return;
     }
     jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
         if (err) {
             res.status(400).send("token is invalid, please try again later");
+            return;
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
             if (admin === id_data.users[0] && admin.is_logon) {
-                const id = req.body.id;
+                const id = req.body.text;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
                 if (!user) {
                     res.status(status_codes.NOT_FOUND);
                     res.send("there is no such user in our users array");
+                    return;
                 } else if (user.id === 0) {
                     res.status(status_codes.FORBIDDEN);
                     res.send("the current id is the admin user - already active");
+                    return;
                 } else {
                     admin_services.suspend_user(user);
                     await data_base.save_data_to_file().then(r => "saved data updated");
                     res.send(JSON.stringify(id_data.users)); //new array
+                    return;
                 }
             }
         }
@@ -161,32 +171,36 @@ async function suspend_user(req, res) {
 
 async function approve_user(req, res) {
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
+        return;
     }
     else {
         jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
             if (err) {
                 res.status(400).send("token is invalid, please try again later");
+                return;
             } else {
                 const admin = g_state.find_user_by_id(user_payload.user_id);
                 if (admin === id_data.users[0] && admin.is_logon) {
-                    const id = req.body.id;
-                    const current_user_id = parseInt(id);
+                    const id = req.body.text;
+                    let current_user_id = parseInt(id);
                     const user = g_state.find_user_by_id(current_user_id);
                     if (!user) {
                         res.status(status_codes.NOT_FOUND);
                         res.send("there is no such user in our users array");
+                        return;
                     } else if (user.id === 0) {
                         res.status(status_codes.FORBIDDEN);
                         res.send("the current id is the admin user - already active");
+                        return;
                     } else {
                         admin_services.approve_join_request(user) //should we check if he is already approved
                         await data_base.save_data_to_file();
                         res.status(status_codes.ACCEPTED);
                         res.send(JSON.stringify(id_data.users)); //new array
+                        return;
                     }
 
                 }
@@ -197,8 +211,7 @@ async function approve_user(req, res) {
 
 function get_all_users(req, res) {
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
     }
@@ -220,28 +233,31 @@ function get_all_users(req, res) {
 
 function send_message_to_all(req, res) {
 
-    const auth_header = req.headers["authorization"];
-    const current_token = auth_header && auth_header.split(" ")[1];
+    const current_token = req.headers["authorization"];
     if (!current_token) {
         res.status(400).send("the token is invalid");
+        return;
     }
     else {
         jwt.verify(current_token, data_base.secret_jwt, async (err, user_payload) => {
             if (err) {
                 res.status(400).send("token is invalid, please try again later");
+                return;
             } else {
                 const admin = g_state.find_user_by_id(user_payload.user_id);
                 if (admin === id_data.users[0] && admin.is_logon) {
-                    const message = req.body.message;
+                    const message = req.body.text;
                     if (!message) {
                         res.status(status_codes.BAD_REQUEST);
                         res.send("Invalid message");
+                        return;
                     }
                     else {
                         admin_services.send_message_to_all_users(message);
                         await data_base.save_data_to_file();
                         res.status(status_codes.ACCEPTED);
                         res.send(JSON.stringify(id_data.users));
+                        return;
                     }
                 }
             }

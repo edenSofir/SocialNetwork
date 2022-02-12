@@ -1,0 +1,20 @@
+<html>
+<head>
+	<title>AboutPage</title>
+	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="../CookieSetGet.js"></script>
+	<script type="text/babel" src="../Nvbar.js" ></script>
+    <script src="About.js" type = "text/babel"></script>
+	<script src="../CheckSession.js" src="text/babel"></script>
+
+</head>
+<body>
+	<div id='container'></div>
+</body>
+<script type="text/babel">                                                                                              
+const domContainer = document.querySelector('#container');
+ReactDOM.render(<AboutPage/> ,domContainer);
+</script>
+</html>
