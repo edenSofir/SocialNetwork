@@ -1,0 +1,42 @@
+body{
+    background: linear-gradient(90deg, rgb(231, 60, 117) 0%, rgb(168, 0, 84) 100%);
+    font-size: 1.2rem;
+}
+.loginContent{
+    margin-top: 200px;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.loginContent h1{
+    font-weight: 600;
+    color: white;
+}
+.loginContent div{
+    margin-bottom: 10px;
+    color: white;
+}
+.loginContent input{
+    border-radius: 20px;
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid rgb(168, 0, 84);
+    font-size: 1.2rem;
+}
+.loginContent button {
+    border-radius: 20px;
+    background-color: rgb(168, 0, 84);
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    
+}
+.loginContent button:hover {
+    background-color: rgb(255, 255, 255);
+    color: rgb(168, 0, 84);
+}

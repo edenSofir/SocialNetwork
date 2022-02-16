@@ -3,17 +3,18 @@
 	<title>Register-Page</title>
 	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
 	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="../CookieSetGet.js"></script>
-    <script src="Register.js" type = "text/babel"></script>
+    <script src="../Extra/CookieSetGet.js"></script>
+    <script src="../js/Register.js"></script>
+	<link rel="stylesheet" type='text/css' href="../Register/Register.css">
+
 </head>
 
 <body>
 	<div id='container'></div>
 </body>
 
-<script type="text/babel">
+<script>
 const domContainer = document.querySelector('#container');
-ReactDOM.render( <Register/> , domContainer);
+ReactDOM.render( React.createElement(Register) , domContainer);
 </script>
 </html>

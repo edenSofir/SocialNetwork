@@ -9,7 +9,6 @@ get_all_posts_from_users = function () {
     const all_posts =[]
     id_data.users.forEach((user,index )=>
         user.posts.forEach((post,index) => all_posts.push(post) ));
-
     return all_posts;
 }
 

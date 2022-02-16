@@ -3,18 +3,19 @@
 	<title>AboutPage</title>
 	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
 	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="../CookieSetGet.js"></script>
-	<script type="text/babel" src="../Nvbar.js" ></script>
-    <script src="About.js" type = "text/babel"></script>
-	<script src="../CheckSession.js" src="text/babel"></script>
+    <script src="../Extra/CookieSetGet.js"></script>
+	<script src="../js/Navbar.js" ></script>
+    <script src="../js/About.js"></script>
+	<script src="../Extra/CheckSession.js"></script>
+	<link rel="stylesheet" type='text/css' href="../Extra/Navbar.css">
+	<link rel="stylesheet" type='text/css' href="../About/About.css">
 
 </head>
 <body>
 	<div id='container'></div>
 </body>
-<script type="text/babel">                                                                                              
+<script>                                                                                              
 const domContainer = document.querySelector('#container');
-ReactDOM.render(<AboutPage/> ,domContainer);
+ReactDOM.render( React.createElement(AboutPage),domContainer);
 </script>
 </html>

@@ -42,6 +42,9 @@ app.use("/post", post_router);
 app.use("/message", message_router);
 app.use("/user", user_router);
 app.use(express.static(path.join(__dirname, 'Ex3')));
+app.get('/', function (req,res) {
+   res.redirect('http://localhost:2718/Login/Login.html')
+});
 app.listen(2718, () => {
     data_base.read_data_from_file().then(r => {admin.create_admin().then(r => console.log("admin create") );});
 });

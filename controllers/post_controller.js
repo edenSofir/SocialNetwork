@@ -24,16 +24,16 @@ async function post_post(req, res) {
             return;
         } else {
             const user = g_state.find_user_by_id(user_payload.user_id);
-            if (user.is_logon) {
+            /*if (user.is_logon) {*/
                 const post = post_services.publish_current_post(user, post_text)
                 await data_base.save_data_to_file()
                 res.status(status_codes.ACCEPTED).send(JSON.stringify(post));
-            }
+            /*}
             else {
                 res.status(status_codes.FORBIDDEN);
                 res.send("You need to login first :)");
                 return;
-            }
+            }*/
         }
     });
 }
@@ -51,15 +51,15 @@ function get_all_posts(req, res) {
             return;
         } else {
             const user = g_state.find_user_by_id(user_payload.user_id);
-            if (user.is_logon) {
+            /*if (user.is_logon) {*/
                 const all_posts = post_services.get_all_posts_from_users();
                 res.send(JSON.stringify(all_posts));
-            }
+            /*}
             else {
                 res.status(status_codes.FORBIDDEN);
                 res.send("You need to login first :)");
                 return;
-            }
+            }*/
         }
     });
 }
@@ -84,7 +84,7 @@ async function delete_current_post(req, res) {
             return;
         } else {//token is OK!
             const user = g_state.find_user_by_id(user_payload.user_id);
-            if (user.is_logon) {
+            /*if (user.is_logon) {*/
                 const post = post_services.delete_current_post(user, post_id);
                 if (!post) {
                     res.status(status_codes.BAD_REQUEST);
@@ -93,11 +93,11 @@ async function delete_current_post(req, res) {
                 }
                 await data_base.save_data_to_file()
                 res.status(status_codes.ACCEPTED).send(JSON.stringify(id_data.users));
-            } else {
+            /*} else {
                 res.status(status_codes.FORBIDDEN);
                 res.send("You need to login first :)");
                 return
-            }
+            }*/
         }
     });
 

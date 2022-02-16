@@ -26,7 +26,7 @@ class User{
 
     delete_post(post_id) {
 
-        if ((this.status === Status.active) && (this.is_logon === true)) {
+        if ((this.status === Status.active)/* && (this.is_logon === true)*/) {
 
             const post = this.posts.find( post => post.id === post_id);
             if(!post) return false;
@@ -36,10 +36,10 @@ class User{
         }
     }
 
-    send_message(recipient, text) {
+    send_message(recipient, text ,sender) {
 
-        if (this.status === Status.active && this.is_logon === true) {
-            const message = new messages.Message(text, id_data.message_id);
+        if (this.status === Status.active /*&& this.is_logon === true*/) {
+            const message = new messages.Message(text, id_data.message_id,sender);
             id_data.message_id += 1;
             recipient.messages.push(message);
             return true;
@@ -48,7 +48,7 @@ class User{
     }
     
     delete() {
-        if(this.status === Status.active && this.is_logon === true) {
+        if(this.status === Status.active /*&& this.is_logon === true*/) {
             //TODO: code duplication
             id_data.users.forEach((user, index) => {
                 if (user.id === this.id) {
@@ -63,13 +63,13 @@ class User{
 }
 
 function get_post_index(user, post_to_find) {
-    if (user.is_logon === true) {
+    /*if (user.is_logon === true) {*/
         user.posts.forEach((post, index) => {
             if (post === post_to_find)
                 return index;
         });
-    }
-    return -1;
+    /*}
+    return -1;*/
 }
 
 const Status = {

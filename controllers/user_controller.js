@@ -26,17 +26,17 @@ async function delete_user_account(req, res) {
                     return;
                 } else {
                     const user = g_state.find_user_by_id(user_payload.user_id);
-                    if (user.is_logon) {
+                    /*if (user.is_logon) {*/
                         user_services.delete_user_account(user);
                         await data_base.save_data_to_file();
                         res.status(status_codes.OK);
                         res.send(JSON.stringify(id_data.users));
                         return;
-                    } else {
+                    /*} else {
                         res.status(status_codes.FORBIDDEN);
                         res.send("you are logoff - please preform login first!");
                         return;
-                    }
+                    }*/
                 }
             }
         })
@@ -66,10 +66,10 @@ async function login_user(req, res) {
            const token  = jwt.sign(
                 { user_id: user.id, email },
                         data_base.secret_jwt,
-                { expiresIn: "10min"}
+                { expiresIn: "30min"}
            );
             await data_base.save_data_to_file();
-            user.is_logon = true;
+            /*user.is_logon = true;*/
             const ret = { token: token, id: user.id};
             res.status(200).json(ret);
         }
@@ -92,18 +92,18 @@ async function logoff_user(req, res) {
                 return;
             } else {
                 const user = g_state.find_user_by_id(user_payload.user_id);
-                if(user.is_logon === true)
+                /*if(user.is_logon === true)
                 {
-                    user.is_logon = false;
+                    user.is_logon = false;*/
                     await data_base.save_data_to_file();
                     res.status(200).json(user);
                     return;
-                }
+               /* }
                 else
                 {
                     res.status(400).send("you are already logout!");
                     return;
-                }
+                }*/
             }
         });
 }

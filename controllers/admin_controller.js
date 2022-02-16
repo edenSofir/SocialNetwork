@@ -19,7 +19,7 @@ function get_user(req, res) {
             return;
         } else {//token is OK!
             const user = g_state.find_user_by_id(user_payload.user_id);
-            if (user.is_logon) {
+            /*if (user.is_logon) {*/
                 const id = req.body.text;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const current_user = g_state.find_user_by_id(current_user_id);
@@ -29,7 +29,36 @@ function get_user(req, res) {
                     res.send("there is no such user in our users array");
                     return;
                 }
-                res.send(JSON.stringify(current_user)).status(200);
+                res.status(200).send(JSON.stringify(current_user));
+                return;
+            }
+    });
+}
+
+function get_current_user(req, res) {
+
+    const current_token = req.headers["authorization"];
+    const current_id = req.headers["id"];
+    if (!current_token) {
+        res.status(400).send("the token is invalid");
+    }
+    jwt.verify(current_token, data_base.secret_jwt, async (err) => {
+        if (err) {
+            res.status(400).send("token is invalid, please try again later");
+            return;
+        } else {
+            const final_id = parseInt(current_id);
+            const user = g_state.find_user_by_id(final_id);
+            if(!user)
+            {
+                res.status(status_codes.NOT_FOUND);
+                res.send("there is no such user in our users array");
+                return;
+            }
+            else
+            {
+                res.status(200).send(JSON.stringify(user));
+                return;
             }
         }
     });
@@ -74,7 +103,7 @@ async function delete_current_user(req, res) {
             return;
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
-            if (admin === id_data.users[0] && admin.is_logon) {
+            if (admin === id_data.users[0] /*&& admin.is_logon*/) {
                 const id = req.body.text;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
@@ -110,7 +139,7 @@ async function restore_user(req, res) {
             return;
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
-            if (admin === id_data.users[0] && admin.is_logon) {
+            if (admin === id_data.users[0]/* && admin.is_logon*/) {
                 const id = req.body.text;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
@@ -146,7 +175,7 @@ async function suspend_user(req, res) {
             return;
         } else {//token is OK!
             const admin = g_state.find_user_by_id(user_payload.user_id);
-            if (admin === id_data.users[0] && admin.is_logon) {
+            if (admin === id_data.users[0]/* && admin.is_logon*/) {
                 const id = req.body.text;
                 const current_user_id = parseInt(id); //should we check if not an int?
                 const user = g_state.find_user_by_id(current_user_id);
@@ -183,7 +212,7 @@ async function approve_user(req, res) {
                 return;
             } else {
                 const admin = g_state.find_user_by_id(user_payload.user_id);
-                if (admin === id_data.users[0] && admin.is_logon) {
+                if (admin === id_data.users[0] /*&& admin.is_logon*/) {
                     const id = req.body.text;
                     let current_user_id = parseInt(id);
                     const user = g_state.find_user_by_id(current_user_id);
@@ -220,13 +249,13 @@ function get_all_users(req, res) {
             res.status(400).send("token is invalid, please try again later");
         } else {
             const user = g_state.find_user_by_id(user_payload.user_id);
-            if(user.is_logon) {
+            /*if(user.is_logon) {*/
                 res.status(status_codes.ACCEPTED);
                 res.send(JSON.stringify(admin_services.get_all_users()));
-            }
+            /*}
             else{
                 res.status(status_codes.FORBIDDEN).send("You are not logg on ");
-            }
+            }*/
         }
     });
 }
@@ -245,7 +274,7 @@ function send_message_to_all(req, res) {
                 return;
             } else {
                 const admin = g_state.find_user_by_id(user_payload.user_id);
-                if (admin === id_data.users[0] && admin.is_logon) {
+                if (admin === id_data.users[0]/* && admin.is_logon*/) {
                     const message = req.body.text;
                     if (!message) {
                         res.status(status_codes.BAD_REQUEST);
@@ -273,7 +302,9 @@ module.exports = {
     suspend_user,
     approve_user,
     get_all_users,
-    send_message_to_all
+    send_message_to_all,
+    get_current_user,
+    
 }
 
 

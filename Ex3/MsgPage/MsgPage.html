@@ -1,0 +1,23 @@
+<html>
+<head>
+	<title>MsgPage</title>
+	<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="../Extra/CookieSetGet.js"></script>
+	<script src="../js/Navbar.js" ></script>
+    <script src="../js/MsgPage.js"></script>
+	<script src="../Extra/CheckSession.js"></script>
+	<script src="../js/Indicator.js" ></script>
+	<link rel="stylesheet" type='text/css' href="../Extra/Navbar.css">
+	<link rel="stylesheet" type='text/css' href="../MsgPage/MsgPage.css">
+	<link rel="stylesheet" type='text/css' href="../Extra/indicator.css">
+
+</head>
+<body>
+	<div id='container'></div>
+</body>
+<script>                                                                                              
+const domContainer = document.querySelector('#container');
+ReactDOM.render(React.createElement(MsgPage) ,domContainer);
+</script>
+</html>

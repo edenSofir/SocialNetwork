@@ -1,0 +1,22 @@
+.amount_new_posts {
+    margin-top: 10px;
+    text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.amount_new_posts button {
+    border-radius: 20px;
+    background-color: rgb(168, 0, 84);
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-size: 1.2rem;
+
+}
+
+.amount_new_posts button:hover {
+    background-color: rgb(231, 60, 117);
+}
