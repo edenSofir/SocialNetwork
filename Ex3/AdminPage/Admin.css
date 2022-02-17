@@ -6,6 +6,7 @@
 
 
 input[type=button], input[type=submit], input[type=reset] {
+    width: fit-content;
     border-radius: 20px;
     background-color: rgb(168, 0, 84);
     border: none;
@@ -14,7 +15,6 @@ input[type=button], input[type=submit], input[type=reset] {
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
-    width: 12%;
     font-size: 1.2rem;
 }
 

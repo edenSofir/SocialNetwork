@@ -1,21 +1,25 @@
-body{
+body {
     background: linear-gradient(90deg, rgb(231, 60, 117) 0%, rgb(168, 0, 84) 100%);
     font-size: 1.2rem;
 }
-.loginContent{
+
+.loginContent {
     margin-top: 200px;
     text-align: center;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-.loginContent h1{
+
+.loginContent h1 {
     font-weight: 600;
     color: white;
 }
-.loginContent div{
+
+.loginContent div {
     margin-bottom: 10px;
     color: white;
 }
-.loginContent input{
+
+.loginContent input {
     border-radius: 20px;
     width: 20%;
     padding: 12px 20px;
@@ -24,6 +28,7 @@ body{
     border: 2px solid rgb(168, 0, 84);
     font-size: 1.2rem;
 }
+
 .loginContent button {
     border-radius: 20px;
     background-color: rgb(168, 0, 84);
@@ -34,9 +39,57 @@ body{
     margin: 4px 2px;
     cursor: pointer;
     font-size: 1.2rem;
-    
+
 }
+
 .loginContent button:hover {
     background-color: rgb(255, 255, 255);
     color: rgb(168, 0, 84);
+}
+
+@media only screen and (max-width: 960px) {
+    .loginContent {
+        content: "width=device-width, initial scale= 1.0";
+        margin-top: 200px;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .loginContent h1 {
+        color: #ffffff;
+        font-size: 100px;
+    }
+
+    .loginContent div {
+        font-size: 40px;
+
+        margin-bottom: 10px;
+        color: white;
+    }
+
+    .loginContent input {
+        border-radius: 20px;
+        width: 40%;
+        height: 50px;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        border: 2px solid rgb(168, 0, 84);
+        font-size: 1.2rem;
+    }
+
+    .loginContent button {
+        border-radius: 20px;
+        background-color: rgb(168, 0, 84);
+        border: none;
+        color: white;
+        padding: 24px 54px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+        font-size: 1.8rem;
+
+    }
+
 }

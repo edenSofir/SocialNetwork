@@ -22,17 +22,29 @@ class Navbar extends React.Component {
             this.setState({ msg: err });
         }
     }
+    myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "navbar") {
+            x.className += " responsive";
+        } else {
+            x.className = "navbar";
+        }
+    }
 
     render() {
         let is_admin = get_cookie('admin') === "true";
         return <nav>
             <h1 className='welcomeHeader'>WELCOME TO SOCIAL NETWORK!</h1>
-            <div className='navbar'>
+            <div className='navbar' id='myTopnav'>
                 <a className='nav-links' href='../HomePage/HomePage.html'>Home Page </a>
                 <a className='nav-links' href='../MsgPage/MsgPage.html'>Message Page</a>
                 <a className='nav-links' href='../About/About.html'>About Page</a>
                 <a className='nav-links' onClick={this.logout_click}>Log out</a>
                 {is_admin && <a className='nav-links' href='../AdminPage/AdminPage.html'>Admin page</a>}
+                
+                    <a className="icon" onClick={this.myFunction}>
+                        <i class="fa fa-bars"></i>
+                    </a>
             </div>
         </nav >
     }

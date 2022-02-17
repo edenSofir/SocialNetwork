@@ -151,7 +151,7 @@ class AdminPage extends React.Component {
                 <input type="approve" value={this.state.text_approve} onChange={this.update_text_approve}></input>
                 <br></br>
                 <input type="button" value='Approve user' onClick={this.approve_click}></input>
-                <div>{this.state.msg_approve} </div>
+                <div>{this.state.msg_approve}</div>
             </div>
             <div>
                 <div>
@@ -160,7 +160,7 @@ class AdminPage extends React.Component {
                 <input type="message" value={this.state.text_message} onChange={this.update_text_message}></input>
                 <br></br>
                 <input type="button" value='Send message' onClick={this.submit_message}></input>
-                <div>{this.state.msg_message} </div>
+                <div>{this.state.msg_message}</div>
                 <div>
                     <div>
                         Delete user by id :
@@ -168,7 +168,7 @@ class AdminPage extends React.Component {
                     <input type="delete" value={this.state.text_delete} onChange={this.update_text_delete}></input>
                     <br></br>
                     <input type="button" value='Delete user' onClick={this.submit_delete}></input>
-                    <div>{this.state.msg_delete} </div>
+                    <div>{this.state.msg_delete}</div>
                 </div>
                 <div>
                     <div>

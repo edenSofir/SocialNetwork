@@ -20,6 +20,14 @@ class Navbar extends React.Component {
             this.setState({ msg: err });
         }
     }
+    myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "navbar") {
+            x.className += " responsive";
+        } else {
+            x.className = "navbar";
+        }
+    }
 
     render() {
         let is_admin = get_cookie('admin') === "true";
@@ -33,7 +41,7 @@ class Navbar extends React.Component {
             ),
             React.createElement(
                 'div',
-                { className: 'navbar' },
+                { className: 'navbar', id: 'myTopnav' },
                 React.createElement(
                     'a',
                     { className: 'nav-links', href: '../HomePage/HomePage.html' },
@@ -58,6 +66,11 @@ class Navbar extends React.Component {
                     'a',
                     { className: 'nav-links', href: '../AdminPage/AdminPage.html' },
                     'Admin page'
+                ),
+                React.createElement(
+                    'a',
+                    { className: 'icon', onClick: this.myFunction },
+                    React.createElement('i', { 'class': 'fa fa-bars' })
                 )
             )
         );
